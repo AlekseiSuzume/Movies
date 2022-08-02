@@ -1,4 +1,4 @@
-package com.suzume.movies.pojo
+package com.suzume.movies.pojo.movieShortResponse
 
 
 import com.google.gson.annotations.SerializedName
@@ -8,8 +8,6 @@ data class Movie(
     val alternativeName: String,
     @SerializedName("description")
     val description: String,
-    @SerializedName("enName")
-    val enName: Any,
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")

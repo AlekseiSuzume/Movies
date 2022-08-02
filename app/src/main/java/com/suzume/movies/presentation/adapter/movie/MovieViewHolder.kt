@@ -1,10 +1,10 @@
-package com.suzume.movies.presentation.adapter
+package com.suzume.movies.presentation.adapter.movie
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
 import com.suzume.movies.databinding.MovieItemBinding
-import com.suzume.movies.pojo.Movie
+import com.suzume.movies.pojo.movieShortResponse.Movie
 
 class MovieViewHolder(
     private val binding: MovieItemBinding
@@ -21,6 +21,5 @@ class MovieViewHolder(
                 in 0.0..4.9 -> tvRating.setBackgroundResource(R.drawable.circle_red)
             }
         }
-
     }
 }

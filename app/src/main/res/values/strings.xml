@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Movies</string>
+    <string name="show_more">Показать еще</string>
+    <string name="btn_actors">Актёры</string>
+    <string name="votes">%s\K</string>
+    <string name="tvYearGenresCountriesLength">%s, %s\n%s, %s ч %d мин</string>
+    <string name="tv_actors">В ролях: %s и другие</string>
+    <string name="cd_movie_poster">Movie poster</string>
 </resources>

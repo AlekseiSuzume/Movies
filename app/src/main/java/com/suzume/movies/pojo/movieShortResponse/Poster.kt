@@ -1,4 +1,4 @@
-package com.suzume.movies.pojo
+package com.suzume.movies.pojo.movieShortResponse
 
 
 import com.google.gson.annotations.SerializedName

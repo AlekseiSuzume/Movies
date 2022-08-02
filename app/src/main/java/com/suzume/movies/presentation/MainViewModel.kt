@@ -5,10 +5,9 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.suzume.movies.api.ApiFactory
-import com.suzume.movies.pojo.Movie
-import com.suzume.movies.pojo.MovieResponse
+import com.suzume.movies.pojo.movieShortResponse.Movie
+import com.suzume.movies.pojo.movieShortResponse.MovieResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -32,10 +31,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var page = 1
 
     init {
-        refreshLiveData()
+        refreshMoviesLiveData()
     }
 
-    fun refreshLiveData() {
+    fun refreshMoviesLiveData() {
         val loading = isLoading.value
         if (loading != null && loading) {
             return
@@ -43,12 +42,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val disposable = loadData(page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(Consumer {
+            .doOnSubscribe {
                 _isLoading.postValue(true)
-            })
-            .doAfterTerminate(Action {
+            }
+            .doAfterTerminate {
                 _isLoading.postValue(false)
-            })
+            }
             .subscribe({
                 _movies.value = _movies.value?.plus(it.movies) ?: it.movies
                 page++
