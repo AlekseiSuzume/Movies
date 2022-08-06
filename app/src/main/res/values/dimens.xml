@@ -9,4 +9,20 @@
         <item name="cornerSizeBottomRight">4dp</item>
     </style>
 
+    <style name="customRoundedImageViewFrame" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeTopRight">8dp</item>
+        <item name="cornerSizeBottomLeft">8dp</item>
+        <item name="cornerSizeBottomRight">8dp</item>
+    </style>
+
+    <style name="customRounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">2dp</item>
+        <item name="cornerSizeTopRight">2dp</item>
+        <item name="cornerSizeBottomLeft">2dp</item>
+        <item name="cornerSizeBottomRight">2dp</item>
+    </style>
+
 </resources>

@@ -20,11 +20,8 @@ class MovieAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback()) {
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = getItem(position)
-        Log.d("test", position.toString())
-        Log.d("test", currentList.size.toString())
         holder.bind(movie)
         if (position == currentList.size - 10) {
-            Log.d("test", "listener")
             onReachEndListener?.invoke()
         }
         holder.itemView.setOnClickListener {

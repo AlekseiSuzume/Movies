@@ -6,4 +6,11 @@
     <string name="tvYearGenresCountriesLength">%s, %s\n%s, %s ч %d мин</string>
     <string name="tv_actors">В ролях: %s и другие</string>
     <string name="cd_movie_poster">Movie poster</string>
+    <string name="actors_item_count">%s</string>
+    <string name="actors">Актёры</string>
+    <string name="tv_film_team">Съёмочная группа</string>
+    <string name="film_team_item_count">%s</string>
+    <string name="tv_review">Рецензии</string>
+    <string name="tv_frame">Изображения</string>
+    <string name="tv_trailers">Трейлеры</string>
 </resources>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="88dp"
     app:cardCornerRadius="4dp"
     app:cardUseCompatPadding="true">
 
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivPerson"
+            android:id="@+id/ivActor"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:adjustViewBounds="true"
@@ -22,7 +22,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvPersonName"
+            android:id="@+id/tvActorName"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -32,14 +32,14 @@
             android:maxLines="1"
             android:textColor="@color/primary_text"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/tvPersonDescription"
-            app:layout_constraintStart_toEndOf="@id/ivPerson"
-            app:layout_constraintTop_toTopOf="@id/ivPerson"
+            app:layout_constraintBottom_toTopOf="@id/tvActorDescription"
+            app:layout_constraintStart_toEndOf="@id/ivActor"
+            app:layout_constraintTop_toTopOf="@id/ivActor"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="Дэниэл Рэдклифф" />
 
         <TextView
-            android:id="@+id/tvPersonDescription"
+            android:id="@+id/tvActorDescription"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -47,10 +47,10 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/secondary_text"
-            app:layout_constraintBottom_toBottomOf="@id/ivPerson"
-            app:layout_constraintStart_toEndOf="@id/ivPerson"
-            app:layout_constraintTop_toBottomOf="@id/tvPersonName"
-            tools:text="Harry Potter1111111111111111111111111111111" />
+            app:layout_constraintBottom_toBottomOf="@id/ivActor"
+            app:layout_constraintStart_toEndOf="@id/ivActor"
+            app:layout_constraintTop_toBottomOf="@id/tvActorName"
+            tools:text="Harry Potter" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

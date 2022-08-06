@@ -1,9 +1,9 @@
-package com.suzume.movies.presentation.adapter.person
+package com.suzume.movies.presentation.adapter.actor
 
 import androidx.recyclerview.widget.DiffUtil
 import com.suzume.movies.pojo.movieDetailResponse.Person
 
-class PersonDiffCallback : DiffUtil.ItemCallback<Person>() {
+class ActorDiffCallback : DiffUtil.ItemCallback<Person>() {
 
     override fun areItemsTheSame(oldItem: Person, newItem: Person): Boolean {
         return oldItem.id == newItem.id

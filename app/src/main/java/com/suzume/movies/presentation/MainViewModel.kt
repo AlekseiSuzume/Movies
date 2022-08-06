@@ -51,7 +51,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .subscribe({
                 _movies.value = _movies.value?.plus(it.movies) ?: it.movies
                 page++
-                Log.d("test", "page $page")
+                Log.d("test" , it.toString())
             }, {
                 Log.d("MainViewModel:refreshLiveData", it.toString())
             })
