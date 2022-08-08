@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
 import com.suzume.movies.databinding.MovieItemBinding
-import com.suzume.movies.pojo.movieShortResponse.Movie
+import com.suzume.movies.data.pojo.movieShortResponse.Movie
 
 class MovieViewHolder(
     private val binding: MovieItemBinding

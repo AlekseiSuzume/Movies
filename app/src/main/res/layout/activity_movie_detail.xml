@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="invisible"
     tools:context=".presentation.MovieDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/ivPoster"
@@ -21,6 +22,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/ivFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivPoster"
+            app:layout_constraintEnd_toEndOf="@id/ivPoster"
+            app:layout_constraintTop_toBottomOf="@id/ivPoster"
+            app:srcCompat="@drawable/baseline_star_off" />
 
         <TextView
             android:id="@+id/ivName"
@@ -176,8 +187,7 @@
                 android:id="@+id/rvActors"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/actor_item" />
+                android:nestedScrollingEnabled="false" />
         </FrameLayout>
 
         <LinearLayout
@@ -233,8 +243,7 @@
                 android:id="@+id/rvMovieTeam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/actor_item" />
+                android:nestedScrollingEnabled="false" />
         </FrameLayout>
 
         <LinearLayout
@@ -290,8 +299,7 @@
                 android:id="@+id/rvReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/review_item" />
+                android:nestedScrollingEnabled="false" />
         </FrameLayout>
 
         <LinearLayout
@@ -347,8 +355,7 @@
                 android:id="@+id/rvFrame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/frame_item" />
+                android:nestedScrollingEnabled="false" />
         </FrameLayout>
 
         <LinearLayout
@@ -404,8 +411,7 @@
                 android:id="@+id/rvTrailer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/trailer_item" />
+                android:nestedScrollingEnabled="false" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

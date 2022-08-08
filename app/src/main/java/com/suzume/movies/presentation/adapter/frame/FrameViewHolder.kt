@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
 import com.suzume.movies.databinding.FrameItemBinding
-import com.suzume.movies.pojo.frameResponse.Frame
+import com.suzume.movies.data.pojo.frameResponse.Frame
 
 class FrameViewHolder(private val binding: FrameItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -14,15 +14,6 @@ class FrameViewHolder(private val binding: FrameItemBinding) :
             .load(frame.url)
             .placeholder(R.drawable.no_poster)
             .into(binding.ivMovieFrame)
-        Log.d("test", "from Frame holder")
            }
     }
-
-
-//    fun hide() {
-//        with(binding.root) {
-//            setBackgroundResource(android.R.color.holo_green_light)
-//            visibility = View.GONE
-//        }
-//    }
 

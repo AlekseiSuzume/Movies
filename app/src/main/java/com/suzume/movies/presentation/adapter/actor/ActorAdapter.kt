@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.ActorItemBinding
 import com.suzume.movies.databinding.ShowMoreItemBinding
-import com.suzume.movies.pojo.movieDetailResponse.Person
+import com.suzume.movies.data.pojo.movieDetailResponse.Person
 
 class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallback()) {
 

@@ -1,9 +1,8 @@
 package com.suzume.movies.presentation.adapter.review
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.ReviewItemBinding
-import com.suzume.movies.pojo.reviewResponse.Review
+import com.suzume.movies.data.pojo.reviewResponse.Review
 
 class ReviewViewHolder(private val binding: ReviewItemBinding) :
     RecyclerView.ViewHolder(binding.root) {

@@ -5,14 +5,14 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.suzume.movies.App
 import com.suzume.movies.api.ApiFactory
-import com.suzume.movies.pojo.movieShortResponse.Movie
-import com.suzume.movies.pojo.movieShortResponse.MovieResponse
+import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
+import com.suzume.movies.data.pojo.movieShortResponse.Movie
+import com.suzume.movies.data.pojo.movieShortResponse.MovieResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.functions.Action
-import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -51,7 +51,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             .subscribe({
                 _movies.value = _movies.value?.plus(it.movies) ?: it.movies
                 page++
-                Log.d("test" , it.toString())
             }, {
                 Log.d("MainViewModel:refreshLiveData", it.toString())
             })

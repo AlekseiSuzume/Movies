@@ -1,9 +1,9 @@
 package com.suzume.movies.api
 
-import com.suzume.movies.pojo.frameResponse.FrameResponse
-import com.suzume.movies.pojo.movieDetailResponse.MovieDetailResponse
-import com.suzume.movies.pojo.movieShortResponse.MovieResponse
-import com.suzume.movies.pojo.reviewResponse.ReviewResponse
+import com.suzume.movies.data.pojo.frameResponse.FrameResponse
+import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
+import com.suzume.movies.data.pojo.movieShortResponse.MovieResponse
+import com.suzume.movies.data.pojo.reviewResponse.ReviewResponse
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -51,7 +51,7 @@ interface ApiService {
         @Query(QUERY_PARAM_TOKEN) token: String = TOKEN_DEFAULT,
         @Query(QUERY_PARAM_FIELD) field: String = ID_PARAM_DETAIL_DEFAULT,
         @Query(QUERY_PARAM_SEARCH) searchId: Int,
-    ): Single<MovieDetailResponse>
+    ): Single<MovieDetail>
 
     @GET("review")
     fun loadMovieReview(

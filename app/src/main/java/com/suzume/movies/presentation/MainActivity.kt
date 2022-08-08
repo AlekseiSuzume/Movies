@@ -1,13 +1,18 @@
 package com.suzume.movies.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.suzume.movies.App
+import com.suzume.movies.data.MovieDatabase
 import com.suzume.movies.databinding.ActivityMainBinding
 import com.suzume.movies.presentation.adapter.movie.MovieAdapter
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,7 +35,6 @@ class MainActivity : AppCompatActivity() {
                 false -> binding.progressBar.visibility = View.GONE
             }
         }
-
     }
 
     private fun init() {

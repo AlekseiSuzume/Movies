@@ -3,7 +3,7 @@ package com.suzume.movies.presentation.adapter.movieTeam
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.suzume.movies.databinding.MovieTeamItemBinding
-import com.suzume.movies.pojo.movieDetailResponse.Person
+import com.suzume.movies.data.pojo.movieDetailResponse.Person
 
 
 class MovieTeamViewHolder(private val binding: MovieTeamItemBinding) :

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.ReviewItemBinding
 import com.suzume.movies.databinding.ShowMoreItemReviewBinding
-import com.suzume.movies.pojo.reviewResponse.Review
+import com.suzume.movies.data.pojo.reviewResponse.Review
 
 class ReviewAdapter : ListAdapter<Review, RecyclerView.ViewHolder>(ReviewDiffCallback()) {
 

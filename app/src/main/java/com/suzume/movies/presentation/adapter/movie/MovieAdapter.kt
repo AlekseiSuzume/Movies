@@ -1,11 +1,10 @@
 package com.suzume.movies.presentation.adapter.movie
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.suzume.movies.databinding.MovieItemBinding
-import com.suzume.movies.pojo.movieShortResponse.Movie
+import com.suzume.movies.data.pojo.movieShortResponse.Movie
 
 class MovieAdapter : ListAdapter<Movie, MovieViewHolder>(MovieDiffCallback()) {
 

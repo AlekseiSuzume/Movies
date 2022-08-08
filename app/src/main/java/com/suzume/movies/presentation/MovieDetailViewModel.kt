@@ -5,12 +5,13 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.suzume.movies.App
 import com.suzume.movies.api.ApiFactory
-import com.suzume.movies.pojo.frameResponse.FrameResponse
-import com.suzume.movies.pojo.movieDetailResponse.MovieDetailResponse
-import com.suzume.movies.pojo.reviewResponse.Review
-import com.suzume.movies.pojo.reviewResponse.ReviewResponse
+import com.suzume.movies.data.pojo.frameResponse.FrameResponse
+import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
+import com.suzume.movies.data.pojo.reviewResponse.ReviewResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -18,10 +19,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class MovieDetailViewModel(application: Application) : AndroidViewModel(application) {
 
     private val compositeDisposable = CompositeDisposable()
+    private val db = App.getDatabase()
     private val apiService = ApiFactory.getApiService()
 
-    private val _movieDetail = MutableLiveData<MovieDetailResponse>()
-    val movieDetail: LiveData<MovieDetailResponse>
+    private val _movieDetail = MutableLiveData<MovieDetail>()
+    val movieDetail: LiveData<MovieDetail>
         get() = _movieDetail
 
     private val _reviewList = MutableLiveData<ReviewResponse>()
@@ -31,6 +33,30 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     private val _frameList = MutableLiveData<FrameResponse>()
     val frameList: LiveData<FrameResponse>
         get() = _frameList
+
+    fun getFavoriteMovie(movieId: Int): LiveData<MovieDetail> {
+        return db.moviesDao().getFavoriteMovie(movieId)
+    }
+
+    fun addFavorite(movie: MovieDetail) {
+        val disposable = db.moviesDao().insertMovie(movie)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+            }, {
+                Log.d("MovieDetailViewModel", it.toString())
+            })
+        compositeDisposable.add(disposable)
+    }
+
+    fun removeFavorite(movieId: Int) {
+        val disposable = db.moviesDao().removeMovie(movieId)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+            }, {
+                Log.d("MovieDetailViewModel", it.toString())
+            })
+        compositeDisposable.add(disposable)
+    }
 
     fun refreshMovieDetailLiveData(id: Int) {
         val disposable = loadMovieDetail(id)
@@ -68,7 +94,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
         compositeDisposable.add(disposable)
     }
 
-    private fun loadMovieDetail(id: Int): Single<MovieDetailResponse> {
+    private fun loadMovieDetail(id: Int): Single<MovieDetail> {
         return apiService.loadMovieDetail(searchId = id)
     }
 

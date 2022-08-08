@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.FrameItemBinding
 import com.suzume.movies.databinding.ShowMoreItemFrameBinding
-import com.suzume.movies.pojo.frameResponse.Frame
+import com.suzume.movies.data.pojo.frameResponse.Frame
 
 class FrameAdapter : ListAdapter<Frame, RecyclerView.ViewHolder>(FrameDiffCallback()) {
 

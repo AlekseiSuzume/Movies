@@ -1,7 +1,7 @@
 package com.suzume.movies.presentation.adapter.movie
 
 import androidx.recyclerview.widget.DiffUtil
-import com.suzume.movies.pojo.movieShortResponse.Movie
+import com.suzume.movies.data.pojo.movieShortResponse.Movie
 
 class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {

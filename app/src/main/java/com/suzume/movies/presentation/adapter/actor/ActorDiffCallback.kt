@@ -1,7 +1,7 @@
 package com.suzume.movies.presentation.adapter.actor
 
 import androidx.recyclerview.widget.DiffUtil
-import com.suzume.movies.pojo.movieDetailResponse.Person
+import com.suzume.movies.data.pojo.movieDetailResponse.Person
 
 class ActorDiffCallback : DiffUtil.ItemCallback<Person>() {
 

@@ -19,13 +19,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
+import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import com.suzume.movies.databinding.ActivityMovieDetailBinding
-import com.suzume.movies.pojo.movieDetailResponse.Person
 import com.suzume.movies.presentation.adapter.actor.ActorAdapter
 import com.suzume.movies.presentation.adapter.frame.FrameAdapter
 import com.suzume.movies.presentation.adapter.movieTeam.MovieTeamAdapter
 import com.suzume.movies.presentation.adapter.review.ReviewAdapter
 import com.suzume.movies.presentation.adapter.trailer.TrailerAdapter
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlin.properties.Delegates
 
 class MovieDetailActivity : AppCompatActivity() {
@@ -58,6 +60,7 @@ class MovieDetailActivity : AppCompatActivity() {
         setupOnClickShowMoreListener()
 
     }
+
 
     private fun init() {
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
@@ -209,8 +212,9 @@ class MovieDetailActivity : AppCompatActivity() {
                 trailerAdapter.submitList(it.videos.trailers)
                 tvTrailerCount.text = it.videos.trailers.size.toString()
 
-                constraintLayout.visibility = View.VISIBLE
             }
+            binding.root.visibility = View.VISIBLE
+            favoriteObserver(it)
         }
 
         viewModel.reviewList.observe(this) {
@@ -224,4 +228,25 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun favoriteObserver(movieDetail: MovieDetail) {
+        viewModel.getFavoriteMovie(movieId)
+            .observe(this) {
+                if (it == null) {
+                    with(binding.ivFavorite) {
+                        setImageResource(R.drawable.baseline_star_off)
+                        setOnClickListener {
+                            viewModel.addFavorite(movieDetail)
+                        }
+                    }
+                } else {
+                    with(binding.ivFavorite) {
+                        setImageResource(R.drawable.baseline_star_on)
+                        setOnClickListener {
+                            viewModel.removeFavorite(movieId)
+                        }
+                    }
+                }
+            }
+
+    }
 }

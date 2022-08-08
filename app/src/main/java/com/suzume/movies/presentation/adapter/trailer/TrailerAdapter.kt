@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.TrailerItemBinding
-import com.suzume.movies.pojo.movieDetailResponse.Trailer
+import com.suzume.movies.data.pojo.movieDetailResponse.Trailer
 
 class TrailerAdapter : ListAdapter<Trailer, RecyclerView.ViewHolder>(TrailerDiffCallback()) {
 
