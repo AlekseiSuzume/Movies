@@ -11,7 +11,6 @@ import com.suzume.movies.data.pojo.frameResponse.FrameResponse
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import com.suzume.movies.data.pojo.reviewResponse.ReviewResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -22,9 +21,13 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     private val db = App.getDatabase()
     private val apiService = ApiFactory.getApiService()
 
-    private val _movieDetail = MutableLiveData<MovieDetail>()
-    val movieDetail: LiveData<MovieDetail>
-        get() = _movieDetail
+    private val _movieDetailFromApi = MutableLiveData<MovieDetail>()
+    val movieDetailFromApi: LiveData<MovieDetail>
+        get() = _movieDetailFromApi
+
+    private val _movieDetailFromDb = MutableLiveData<MovieDetail>()
+    val movieDetailFromDb: LiveData<MovieDetail>
+        get() = _movieDetailFromDb
 
     private val _reviewList = MutableLiveData<ReviewResponse>()
     val reviewList: LiveData<ReviewResponse>
@@ -58,12 +61,24 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
         compositeDisposable.add(disposable)
     }
 
-    fun refreshMovieDetailLiveData(id: Int) {
+    fun refreshMovieDetailLiveDataFromDb(id: Int) {
+        val disposable = db.moviesDao().getFavoriteMovie2(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                _movieDetailFromDb.value = it
+            }, {
+                Log.d("MovieDetailViewModel", it.toString())
+            })
+        compositeDisposable.add(disposable)
+    }
+
+    fun refreshMovieDetailLiveDataFromApi(id: Int) {
         val disposable = loadMovieDetail(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                _movieDetail.value = it
+                _movieDetailFromApi.value = it
             }, {
                 Log.d("MovieDetailViewModel", it.toString())
             })

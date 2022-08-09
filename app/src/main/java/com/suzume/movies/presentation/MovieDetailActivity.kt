@@ -10,7 +10,6 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,18 +25,17 @@ import com.suzume.movies.presentation.adapter.frame.FrameAdapter
 import com.suzume.movies.presentation.adapter.movieTeam.MovieTeamAdapter
 import com.suzume.movies.presentation.adapter.review.ReviewAdapter
 import com.suzume.movies.presentation.adapter.trailer.TrailerAdapter
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlin.properties.Delegates
 
 class MovieDetailActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_FROM_ID = "id"
-
-        fun newIntent(context: Context, fromId: Int): Intent {
+        private const val EXTRA_FROM_DB = "loadFromDb"
+        fun newIntent(context: Context, fromId: Int, loadFromDb: Boolean): Intent {
             return Intent(context, MovieDetailActivity::class.java)
                 .putExtra(EXTRA_FROM_ID, fromId)
+                .putExtra(EXTRA_FROM_DB, loadFromDb)
         }
     }
 
@@ -48,6 +46,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var frameAdapter: FrameAdapter
     private lateinit var trailerAdapter: TrailerAdapter
     private var movieId by Delegates.notNull<Int>()
+    var isMovieFromDb by Delegates.notNull<Boolean>()
     private lateinit var viewModel: MovieDetailViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,18 +54,24 @@ class MovieDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         init()
-        setupContent()
+        initSetupContent()
         setupOnClickPersonListener()
         setupOnClickShowMoreListener()
-
     }
 
 
     private fun init() {
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
-
+        isMovieFromDb = intent.getBooleanExtra(EXTRA_FROM_DB, false)
         viewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
-        viewModel.refreshMovieDetailLiveData(movieId)
+
+        if (isMovieFromDb) {
+            viewModel.refreshMovieDetailLiveDataFromDb(movieId)
+
+        } else {
+            viewModel.refreshMovieDetailLiveDataFromApi(movieId)
+        }
+
         viewModel.refreshReviewListLiveData(movieId)
         viewModel.refreshFrameLiveData(movieId)
 
@@ -111,28 +116,28 @@ class MovieDetailActivity : AppCompatActivity() {
         )
     }
 
-    private fun setupOnClickShowMoreListener() {
-        actorAdapter.onClickShowMoreListener = {
-            Toast.makeText(this, "OnClickShowMoreListener", Toast.LENGTH_SHORT).show()
+    private fun initSetupContent() {
+        if (isMovieFromDb) {
+            viewModel.movieDetailFromDb.observe(this) { it ->
+                setupContent(it)
+            }
+        } else {
+            viewModel.movieDetailFromApi.observe(this) { it ->
+                setupContent(it)
+            }
         }
     }
 
-    private fun setupOnClickPersonListener() {
-        actorAdapter.onClickActorListener = {
-            Toast.makeText(this, "OnClickPersonListener", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun setupContent() {
-        viewModel.movieDetail.observe(this) { it ->
-            Glide.with(this)
-                .load(it.poster.url)
+    private fun setupContent(movieDetail: MovieDetail) {
+        with(movieDetail) {
+            Glide.with(this@MovieDetailActivity)
+                .load(poster.url)
                 .into(binding.ivPoster)
             with(binding) {
-                ivName.text = it.name
-                tvAlternativeName.text = it.alternativeName
-                tvRating.text = it.rating.kp.toString()
-                when (it.rating.kp) {
+                ivName.text = name
+                tvAlternativeName.text = alternativeName
+                tvRating.text = rating.kp.toString()
+                when (rating.kp) {
                     in 0.0..4.9 -> binding.tvRating.setTextColor(
                         resources.getColor(android.R.color.holo_red_dark, theme)
                     )
@@ -144,21 +149,21 @@ class MovieDetailActivity : AppCompatActivity() {
                     )
                 }
                 tvVotes.text =
-                    root.resources.getString(R.string.votes, (it.votes.kp % 1000).toString())
+                    root.resources.getString(R.string.votes, (votes.kp % 1000).toString())
                 tvYearGenresCountriesLength.text =
                     root.resources.getString(
                         R.string.tvYearGenresCountriesLength,
-                        it.year.toString(),
-                        it.genres.map { it.name }.distinct().joinToString(", "),
-                        it.countries.map { it.name }.distinct().joinToString(", "),
-                        (it.movieLength / 60).toString(),
-                        (it.movieLength - ((it.movieLength / 60) * 60))
+                        year.toString(),
+                        genres.map { name }.distinct().joinToString(", "),
+                        countries.map { name }.distinct().joinToString(", "),
+                        (movieLength / 60).toString(),
+                        (movieLength - ((movieLength / 60) * 60))
                     )
 
                 val spannableString = SpannableString(
                     root.resources.getString(
                         R.string.tv_actors,
-                        it.persons
+                        persons
                             .filter { it.enProfession == "actor" }
                             .take(4)
                             .joinToString(", ") { it.name }
@@ -192,29 +197,28 @@ class MovieDetailActivity : AppCompatActivity() {
                 tvActors.text = spannableString
                 tvActors.movementMethod = LinkMovementMethod.getInstance()
 
-                tvDescription.text = it.description
+                tvDescription.text = description
                 tvActorCount.text = resources.getString(
                     R.string.actors_item_count,
-                    it.persons.filter { it.enProfession == "actor" }.size.toString()
+                    persons.filter { it.enProfession == "actor" }.size.toString()
                 )
                 tvMovieTeamCount.text = resources.getString(
                     R.string.film_team_item_count,
-                    it.persons.filter { it.enProfession != "actor" }.size.toString()
+                    persons.filter { it.enProfession != "actor" }.size.toString()
                 )
 
-                actorAdapter.submitList(it.persons.filter { it.enProfession == "actor" })
+                actorAdapter.submitList(persons.filter { it.enProfession == "actor" })
                 movieTeamAdapter.submitList(
-                    it.persons.filter { it.enProfession != "actor" }.distinctBy { it.name })
+                    persons.filter { it.enProfession != "actor" }.distinctBy { it.name })
                 llActors.setOnClickListener {
                     Toast.makeText(this@MovieDetailActivity, "Actors", Toast.LENGTH_SHORT).show()
                 }
 
-                trailerAdapter.submitList(it.videos.trailers)
-                tvTrailerCount.text = it.videos.trailers.size.toString()
-
+                trailerAdapter.submitList(videos.trailers)
+                tvTrailerCount.text = videos.trailers.size.toString()
+                favoriteObserver(movieDetail)
             }
             binding.root.visibility = View.VISIBLE
-            favoriteObserver(it)
         }
 
         viewModel.reviewList.observe(this) {
@@ -229,7 +233,7 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun favoriteObserver(movieDetail: MovieDetail) {
-        viewModel.getFavoriteMovie(movieId)
+        viewModel.getFavoriteMovie(movieDetail.id)
             .observe(this) {
                 if (it == null) {
                     with(binding.ivFavorite) {
@@ -248,5 +252,17 @@ class MovieDetailActivity : AppCompatActivity() {
                 }
             }
 
+    }
+
+    private fun setupOnClickShowMoreListener() {
+        actorAdapter.onClickShowMoreListener = {
+            Toast.makeText(this, "OnClickShowMoreListener", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupOnClickPersonListener() {
+        actorAdapter.onClickActorListener = {
+            Toast.makeText(this, "OnClickPersonListener", Toast.LENGTH_SHORT).show()
+        }
     }
 }

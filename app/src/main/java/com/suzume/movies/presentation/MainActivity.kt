@@ -2,13 +2,13 @@ package com.suzume.movies.presentation
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.suzume.movies.App
-import com.suzume.movies.data.MovieDatabase
+import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityMainBinding
 import com.suzume.movies.presentation.adapter.movie.MovieAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         init()
         setupOnReachEndListener()
-        setupOnClickListener()
+        setupOnMovieClickListener()
 
         viewModel.isLoading.observe(this) {
             when (it) {
@@ -49,9 +49,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupOnClickListener() {
+    private fun setupOnMovieClickListener() {
         adapter.onClickListener = {
-            startActivity(MovieDetailActivity.newIntent(this, it.id))
+            startActivity(MovieDetailActivity.newIntent(this, it.id, false))
         }
     }
 
@@ -61,4 +61,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menuItemFavoriteMovies){
+            val intent = FavoriteMoviesActivity.getIntent(this)
+            startActivity(intent)
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

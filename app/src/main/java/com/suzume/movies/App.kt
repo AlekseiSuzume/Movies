@@ -8,7 +8,7 @@ class App : Application() {
 
     companion object {
         private lateinit var db: MovieDatabase
-        const val DB_NAME = "favoriteMovies.db"
+        private const val DB_NAME = "favoriteMovies.db"
         fun getDatabase(): MovieDatabase {
             return db
         }

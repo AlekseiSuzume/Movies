@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface MoviesDao {
@@ -16,6 +17,9 @@ interface MoviesDao {
 
     @Query("SELECT * FROM favorite_movies WHERE id = :movieId")
     fun getFavoriteMovie(movieId: Int): LiveData<MovieDetail>
+
+    @Query("SELECT * FROM favorite_movies WHERE id = :movieId")
+    fun getFavoriteMovie2(movieId: Int): Single<MovieDetail>
 
     @Insert
     fun insertMovie(movie: MovieDetail): Completable

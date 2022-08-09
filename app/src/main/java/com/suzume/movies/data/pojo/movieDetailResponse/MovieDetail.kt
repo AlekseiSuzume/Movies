@@ -14,7 +14,7 @@ data class MovieDetail(
     @SerializedName("ageRating")
     val ageRating: Int,
     @SerializedName("alternativeName")
-    val alternativeName: String,
+    val alternativeName: String?,
     @SerializedName("countries")
     val countries: List<Country>,
     @SerializedName("createDate")
@@ -35,12 +35,6 @@ data class MovieDetail(
     @SerializedName("rating")
     @Embedded
     val rating: Rating,
-    @SerializedName("ratingMpaa")
-    val ratingMpaa: String,
-    @SerializedName("shortDescription")
-    val shortDescription: String,
-    @SerializedName("slogan")
-    val slogan: String,
     @SerializedName("status")
     val status: String,
     @SerializedName("type")
