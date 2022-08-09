@@ -16,10 +16,10 @@ interface MoviesDao {
     fun getAllFavoriteMovies(): Observable<List<MovieDetail>>
 
     @Query("SELECT * FROM favorite_movies WHERE id = :movieId")
-    fun getFavoriteMovie(movieId: Int): LiveData<MovieDetail>
+    fun getFavoriteMovieLiveData(movieId: Int): LiveData<MovieDetail>
 
     @Query("SELECT * FROM favorite_movies WHERE id = :movieId")
-    fun getFavoriteMovie2(movieId: Int): Single<MovieDetail>
+    fun getFavoriteMovie(movieId: Int): Single<MovieDetail>
 
     @Insert
     fun insertMovie(movie: MovieDetail): Completable

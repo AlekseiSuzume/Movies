@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnMovieClickListener() {
         adapter.onClickListener = {
-            startActivity(MovieDetailActivity.newIntent(this, it.id, false))
+            startActivity(MovieDetailActivity.newIntent(this, it.id))
         }
     }
 

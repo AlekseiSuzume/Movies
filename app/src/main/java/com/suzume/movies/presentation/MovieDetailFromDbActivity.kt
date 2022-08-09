@@ -2,7 +2,7 @@ package com.suzume.movies.presentation
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface.BOLD
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -19,53 +19,42 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
-import com.suzume.movies.databinding.ActivityMovieDetailBinding
+import com.suzume.movies.databinding.ActivityMovieDetailFromDbBinding
 import com.suzume.movies.presentation.adapter.actor.ActorAdapter
-import com.suzume.movies.presentation.adapter.frame.FrameAdapter
 import com.suzume.movies.presentation.adapter.movieTeam.MovieTeamAdapter
-import com.suzume.movies.presentation.adapter.review.ReviewAdapter
-import com.suzume.movies.presentation.adapter.trailer.TrailerAdapter
 import kotlin.properties.Delegates
 
-class MovieDetailActivity : AppCompatActivity() {
+class MovieDetailFromDbActivity : AppCompatActivity() {
 
     companion object {
-        private const val EXTRA_FROM_ID = "id"
-        fun newIntent(context: Context, fromId: Int): Intent {
-            return Intent(context, MovieDetailActivity::class.java)
-                .putExtra(EXTRA_FROM_ID, fromId)
+        private const val EXTRA_FROM_ID = "movieId"
+        fun getIntent(context: Context, movieId: Int): Intent {
+            return Intent(context, MovieDetailFromDbActivity::class.java)
+                .putExtra(EXTRA_FROM_ID, movieId)
         }
     }
 
-    private lateinit var binding: ActivityMovieDetailBinding
-    private lateinit var actorAdapter: ActorAdapter
-    private lateinit var movieTeamAdapter: MovieTeamAdapter
-    private lateinit var reviewAdapter: ReviewAdapter
-    private lateinit var frameAdapter: FrameAdapter
-    private lateinit var trailerAdapter: TrailerAdapter
+    private lateinit var binding: ActivityMovieDetailFromDbBinding
+    private lateinit var viewModel: MovieDetailFromDbViewModel
+    private val actorAdapter = ActorAdapter()
+    private val movieTeamAdapter = MovieTeamAdapter()
     private var movieId by Delegates.notNull<Int>()
-    private lateinit var viewModel: MovieDetailViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivityMovieDetailFromDbBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        binding = ActivityMovieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         init()
         initSetupContent()
-        setupOnClickPersonListener()
-        setupOnClickShowMoreListener()
+
     }
 
-
     private fun init() {
+        viewModel = ViewModelProvider(this)[MovieDetailFromDbViewModel::class.java]
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
-        viewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
+        viewModel.getSingleMovieDetailFromDb(movieId)
 
-        viewModel.refreshMovieDetailLiveDataFromApi(movieId)
-        viewModel.refreshReviewLiveData(movieId)
-        viewModel.refreshFrameLiveData(movieId)
-
-        actorAdapter = ActorAdapter()
         binding.rvActors.adapter = actorAdapter
         binding.rvActors.layoutManager = GridLayoutManager(
             this,
@@ -74,47 +63,23 @@ class MovieDetailActivity : AppCompatActivity() {
             false
         )
 
-        movieTeamAdapter = MovieTeamAdapter()
         binding.rvMovieTeam.adapter = movieTeamAdapter
         binding.rvMovieTeam.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
-            false
-        )
+            false)
 
-        reviewAdapter = ReviewAdapter()
-        binding.rvReview.adapter = reviewAdapter
-        binding.rvReview.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-
-        frameAdapter = FrameAdapter()
-        binding.rvFrame.adapter = frameAdapter
-        binding.rvFrame.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-
-        trailerAdapter = TrailerAdapter()
-        binding.rvTrailer.adapter = trailerAdapter
-        binding.rvTrailer.layoutManager = LinearLayoutManager(
-            this, LinearLayoutManager.HORIZONTAL,
-            false
-        )
     }
 
     private fun initSetupContent() {
-            viewModel.movieDetailFromApi.observe(this) { it ->
-                setupContent(it)
-            }
+        viewModel.movieDetailFromDb.observe(this) {
+            setupContent(it)
         }
+    }
 
     private fun setupContent(movieDetail: MovieDetail) {
         with(movieDetail) {
-            Glide.with(this@MovieDetailActivity)
+            Glide.with(this@MovieDetailFromDbActivity)
                 .load(poster.url)
                 .into(binding.ivPoster)
             with(binding) {
@@ -133,7 +98,8 @@ class MovieDetailActivity : AppCompatActivity() {
                     )
                 }
                 tvVotes.text =
-                    root.resources.getString(R.string.votes, (votes.kp % 1000).toString())
+                    root.resources.getString(R.string.votes,
+                        (votes.kp % 1000).toString())
                 tvYearGenresCountriesLength.text =
                     root.resources.getString(
                         R.string.tvYearGenresCountriesLength,
@@ -155,7 +121,7 @@ class MovieDetailActivity : AppCompatActivity() {
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(widget: View) {
                         Toast.makeText(
-                            this@MovieDetailActivity,
+                            this@MovieDetailFromDbActivity,
                             "TextClickTest", Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -163,7 +129,8 @@ class MovieDetailActivity : AppCompatActivity() {
                     override fun updateDrawState(ds: TextPaint) {
                         super.updateDrawState(ds)
                         ds.isUnderlineText = false
-                        ds.color = resources.getColor(R.color.secondary_text, theme)
+                        ds.color =
+                            resources.getColor(R.color.secondary_text, theme)
                     }
                 }
                 spannableString.setSpan(
@@ -173,7 +140,7 @@ class MovieDetailActivity : AppCompatActivity() {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 spannableString.setSpan(
-                    StyleSpan(BOLD),
+                    StyleSpan(Typeface.BOLD),
                     spannableString.length - 8,
                     spannableString.length,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -195,58 +162,28 @@ class MovieDetailActivity : AppCompatActivity() {
                 movieTeamAdapter.submitList(
                     persons.filter { it.enProfession != "actor" }.distinctBy { it.name })
                 llActors.setOnClickListener {
-                    Toast.makeText(this@MovieDetailActivity, "Actors", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MovieDetailFromDbActivity, "Actors", Toast.LENGTH_SHORT)
+                        .show()
                 }
-
-                trailerAdapter.submitList(videos.trailers)
-                tvTrailerCount.text = videos.trailers.size.toString()
                 favoriteObserver(movieDetail)
             }
             binding.root.visibility = View.VISIBLE
         }
-
-        viewModel.reviewList.observe(this) {
-            reviewAdapter.submitList(it.reviews)
-            binding.tvReviewCount.text = it.total.toString()
-        }
-
-        viewModel.frameList.observe(this) {
-            frameAdapter.submitList(it.frames)
-            binding.tvFrameCount.text = it.total.toString()
-        }
     }
 
     private fun favoriteObserver(movieDetail: MovieDetail) {
-        viewModel.getFavoriteMovie(movieDetail.id)
-            .observe(this) {
-                if (it == null) {
-                    with(binding.ivFavorite) {
-                        setImageResource(R.drawable.baseline_star_off)
-                        setOnClickListener {
-                            viewModel.addFavorite(movieDetail)
-                        }
-                    }
-                } else {
-                    with(binding.ivFavorite) {
-                        setImageResource(R.drawable.baseline_star_on)
-                        setOnClickListener {
-                            viewModel.removeFavorite(movieId)
-                        }
-                    }
+        viewModel.getLiveDataMovieDetailFromDb(movieDetail.id).observe(this) {
+            if (it == null) {
+                binding.ivFavorite.setImageResource(R.drawable.baseline_star_off)
+                binding.ivFavorite.setOnClickListener {
+                    viewModel.addFavorite(movieDetail)
+                }
+            } else {
+                binding.ivFavorite.setImageResource(R.drawable.baseline_star_on)
+                binding.ivFavorite.setOnClickListener {
+                    viewModel.removeFavorite(movieId)
                 }
             }
-
-    }
-
-    private fun setupOnClickShowMoreListener() {
-        actorAdapter.onClickShowMoreListener = {
-            Toast.makeText(this, "OnClickShowMoreListener", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun setupOnClickPersonListener() {
-        actorAdapter.onClickActorListener = {
-            Toast.makeText(this, "OnClickPersonListener", Toast.LENGTH_SHORT).show()
         }
     }
 }

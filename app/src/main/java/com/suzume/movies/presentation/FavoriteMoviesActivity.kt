@@ -45,7 +45,8 @@ class FavoriteMoviesActivity : AppCompatActivity() {
 
     private fun setupOnMovieClickListener() {
         adapter.onClickListener = {
-            startActivity(MovieDetailActivity.newIntent(this, it.id, true))
+//            startActivity(MovieDetailActivity.newIntent(this, it.id, true))
+            startActivity(MovieDetailFromDbActivity.getIntent(this, it.id))
         }
     }
 
