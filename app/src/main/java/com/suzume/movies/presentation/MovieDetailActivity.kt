@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
+import com.suzume.movies.data.pojo.movieDetailResponse.Person
 import com.suzume.movies.databinding.ActivityMovieDetailBinding
 import com.suzume.movies.presentation.adapter.actor.ActorAdapter
 import com.suzume.movies.presentation.adapter.frame.FrameAdapter
@@ -51,7 +52,7 @@ class MovieDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         init()
-        initSetupContent()
+        loadMovieDetail()
         setupOnClickPersonListener()
         setupOnClickShowMoreListener()
     }
@@ -61,7 +62,7 @@ class MovieDetailActivity : AppCompatActivity() {
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
         viewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
 
-        viewModel.refreshMovieDetailLiveDataFromApi(movieId)
+        viewModel.refreshMovieDetailLiveData(movieId)
         viewModel.refreshReviewLiveData(movieId)
         viewModel.refreshFrameLiveData(movieId)
 
@@ -106,11 +107,11 @@ class MovieDetailActivity : AppCompatActivity() {
         )
     }
 
-    private fun initSetupContent() {
-            viewModel.movieDetailFromApi.observe(this) { it ->
-                setupContent(it)
-            }
+    private fun loadMovieDetail() {
+        viewModel.movieDetailFromApi.observe(this) { it ->
+            setupContent(it)
         }
+    }
 
     private fun setupContent(movieDetail: MovieDetail) {
         with(movieDetail) {
@@ -122,13 +123,13 @@ class MovieDetailActivity : AppCompatActivity() {
                 tvAlternativeName.text = alternativeName
                 tvRating.text = rating.kp.toString()
                 when (rating.kp) {
-                    in 0.0..4.9 -> binding.tvRating.setTextColor(
+                    in 0.0..4.9 -> tvRating.setTextColor(
                         resources.getColor(android.R.color.holo_red_dark, theme)
                     )
-                    in 5.0..6.9 -> binding.tvRating.setTextColor(
+                    in 5.0..6.9 -> tvRating.setTextColor(
                         resources.getColor(android.R.color.holo_orange_dark, theme)
                     )
-                    in 7.0..10.0 -> binding.tvRating.setTextColor(
+                    in 7.0..10.0 -> tvRating.setTextColor(
                         resources.getColor(android.R.color.holo_green_dark, theme)
                     )
                 }
@@ -150,14 +151,18 @@ class MovieDetailActivity : AppCompatActivity() {
                         persons
                             .filter { it.enProfession == "actor" }
                             .take(4)
-                            .joinToString(", ") { it.name }
+                            .joinToString(", ") { it.name.toString() }
                     ))
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        Toast.makeText(
+                        startActivity(PersonListActivity.getIntent(
                             this@MovieDetailActivity,
-                            "TextClickTest", Toast.LENGTH_SHORT
-                        ).show()
+                            persons
+                                .filter { it.enProfession == "actor" }
+                                .distinctBy { it.name }
+                                    as ArrayList<Person>,
+                            PersonListActivity.ACTOR
+                        ))
                     }
 
                     override fun updateDrawState(ds: TextPaint) {
@@ -192,12 +197,34 @@ class MovieDetailActivity : AppCompatActivity() {
                 )
 
                 actorAdapter.submitList(persons.filter { it.enProfession == "actor" })
+                llActors.setOnClickListener {
+                    startActivity(PersonListActivity.getIntent(
+                        this@MovieDetailActivity,
+                        persons
+                            .filter { it.enProfession == "actor" }
+                            .distinctBy { it.name }
+                                as ArrayList<Person>,
+                        PersonListActivity.ACTOR
+                    ))
+                }
                 movieTeamAdapter.submitList(
                     persons.filter { it.enProfession != "actor" }.distinctBy { it.name })
-                llActors.setOnClickListener {
-                    Toast.makeText(this@MovieDetailActivity, "Actors", Toast.LENGTH_SHORT).show()
+                llMovieTeam.setOnClickListener {
+                    startActivity(PersonListActivity.getIntent(
+                        this@MovieDetailActivity,
+                        persons
+                            .filter { it.enProfession != "actor" }
+                            .distinctBy { it.name }
+                                as ArrayList<Person>,
+                        PersonListActivity.MOVIE_TEAM
+                    ))
                 }
-
+                llReview.setOnClickListener {
+                    startActivity(ReviewListActivity.getIntent(
+                        this@MovieDetailActivity,
+                        movieId
+                    ))
+                }
                 trailerAdapter.submitList(videos.trailers)
                 tvTrailerCount.text = videos.trailers.size.toString()
                 favoriteObserver(movieDetail)
@@ -209,6 +236,7 @@ class MovieDetailActivity : AppCompatActivity() {
             reviewAdapter.submitList(it.reviews)
             binding.tvReviewCount.text = it.total.toString()
         }
+
 
         viewModel.frameList.observe(this) {
             frameAdapter.submitList(it.frames)
@@ -239,14 +267,29 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun setupOnClickShowMoreListener() {
-        actorAdapter.onClickShowMoreListener = {
-            Toast.makeText(this, "OnClickShowMoreListener", Toast.LENGTH_SHORT).show()
+        actorAdapter.showMoreOnClickListener = {
+            startActivity(PersonListActivity.getIntent(
+                this,
+                actorAdapter.currentList.toList() as ArrayList<Person>,
+                PersonListActivity.ACTOR
+            ))
+        }
+        movieTeamAdapter.onShowMoreClickListener = {
+            startActivity(PersonListActivity.getIntent(
+                this,
+                movieTeamAdapter.currentList.toList() as ArrayList<Person>,
+                PersonListActivity.MOVIE_TEAM
+            ))
+        }
+        reviewAdapter.onShowMoreClickListener = {
+            startActivity(ReviewListActivity.getIntent(this, movieId))
         }
     }
 
     private fun setupOnClickPersonListener() {
-        actorAdapter.onClickActorListener = {
+        actorAdapter.actorOnClickListener = {
             Toast.makeText(this, "OnClickPersonListener", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import com.suzume.movies.databinding.MovieItemBinding
 
-class FavoriteMovieAdapter : ListAdapter<MovieDetail, FavoriteMovieViewHolder>(MovieDiffCallback()) {
+class FavoriteMovieAdapter : ListAdapter<MovieDetail, FavoriteMovieViewHolder>(FavoriteMovieDiffCallback()) {
 
     var onReachEndListener: (() -> Unit)? = null
     var onClickListener: ((MovieDetail) -> Unit)? = null

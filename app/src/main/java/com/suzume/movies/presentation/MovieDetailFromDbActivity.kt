@@ -116,7 +116,7 @@ class MovieDetailFromDbActivity : AppCompatActivity() {
                         persons
                             .filter { it.enProfession == "actor" }
                             .take(4)
-                            .joinToString(", ") { it.name }
+                            .joinToString(", ") { it.name.toString() }
                     ))
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(widget: View) {

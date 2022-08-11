@@ -35,14 +35,10 @@ data class MovieDetail(
     @SerializedName("rating")
     @Embedded
     val rating: Rating,
-    @SerializedName("status")
-    val status: String,
     @SerializedName("type")
     val type: String,
     @SerializedName("typeNumber")
     val typeNumber: Int,
-    @SerializedName("updatedAt")
-    val updatedAt: String,
     @SerializedName("videos")
     @Embedded
     val videos: Videos,

@@ -12,14 +12,17 @@ class MovieTeamAdapter :
     ListAdapter<Person, RecyclerView.ViewHolder>(MovieTeamDiffCallback()) {
 
     companion object {
-        const val VIEW_TYPE_PERSON = 0
+        const val VIEW_TYPE_MOVIE_TEAM = 0
         const val VIEW_TYPE_SHOW_MORE = 1
     }
+
+    var onMovieTeamClickListener: (() -> Unit)? = null
+    var onShowMoreClickListener: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_PERSON -> {
+            VIEW_TYPE_MOVIE_TEAM -> {
                 val binding = MovieTeamItemBinding
                     .inflate(inflater, parent, false)
                 MovieTeamViewHolder(binding)
@@ -38,13 +41,19 @@ class MovieTeamAdapter :
         if (holder is MovieTeamViewHolder) {
             holder.bind(person)
         }
+       holder.itemView.setOnClickListener {
+           when (holder){
+               is MovieTeamViewHolder -> onMovieTeamClickListener?.invoke()
+               is ShowMoreViewHolder -> onShowMoreClickListener?.invoke()
+           }
+       }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (position > 5) {
             VIEW_TYPE_SHOW_MORE
         } else {
-            VIEW_TYPE_PERSON
+            VIEW_TYPE_MOVIE_TEAM
         }
     }
 

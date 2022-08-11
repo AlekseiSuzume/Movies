@@ -15,8 +15,8 @@ class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallb
         const val VIEW_TYPE_SHOW_MORE = 1
     }
 
-    var onClickActorListener: (() -> Unit)? = null
-    var onClickShowMoreListener: (() -> Unit)? = null
+    var actorOnClickListener: (() -> Unit)? = null
+    var showMoreOnClickListener: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -43,8 +43,8 @@ class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallb
         }
         holder.itemView.setOnClickListener {
             when (holder) {
-                is ActorViewHolder -> onClickActorListener?.invoke()
-                is ShowMoreActorViewHolder -> onClickShowMoreListener?.invoke()
+                is ActorViewHolder -> actorOnClickListener?.invoke()
+                is ShowMoreActorViewHolder -> showMoreOnClickListener?.invoke()
             }
         }
     }

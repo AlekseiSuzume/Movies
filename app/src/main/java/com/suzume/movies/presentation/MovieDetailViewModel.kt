@@ -57,7 +57,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
         compositeDisposable.add(disposable)
     }
 
-    fun refreshMovieDetailLiveDataFromApi(id: Int) {
+    fun refreshMovieDetailLiveData(id: Int) {
         val disposable = loadMovieDetail(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -98,7 +98,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private fun loadReview(id: Int): Single<ReviewResponse> {
-        return apiService.loadMovieReview(searchId = id)
+        return apiService.loadMovieReviewAll(searchId = id)
     }
 
     private fun loadFrame(id: Int): Single<FrameResponse> {

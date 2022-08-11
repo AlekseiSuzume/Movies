@@ -26,11 +26,12 @@ interface ApiService {
         const val MOVIE_SORT_VALUE_DEFAULT = -1
         const val MOVIE_LIMIT_DEFAULT = 30
         const val PAGE_DEFAULT = 1
+        const val TYPE_FIELD_DEFAULT = "type"
 
         const val ID_PARAM_DETAIL_DEFAULT = "id"
 
         const val SEARCH_FIELD_MOVIE_ID = "movieId"
-        const val SEARCH_FIELD_LIMIT_REVIEW_DEFAULT = 10
+        const val SEARCH_FIELD_LIMIT_REVIEW_DEFAULT = 5
         const val SEARCH_FIELD_LIMIT_FRAME_DEFAULT = 500
     }
 
@@ -54,19 +55,30 @@ interface ApiService {
     ): Single<MovieDetail>
 
     @GET("review")
-    fun loadMovieReview(
+    fun loadMovieReviewAll(
         @Query(QUERY_PARAM_TOKEN) token: String = TOKEN_DEFAULT,
-        @Query(QUERY_PARAM_FIELD) field: String = SEARCH_FIELD_MOVIE_ID,
         @Query(QUERY_PARAM_LIMIT) limit: Int = SEARCH_FIELD_LIMIT_REVIEW_DEFAULT,
+        @Query(QUERY_PARAM_PAGE) page: Int = PAGE_DEFAULT,
+        @Query(QUERY_PARAM_FIELD) movieId: String = SEARCH_FIELD_MOVIE_ID,
         @Query(QUERY_PARAM_SEARCH) searchId: Int,
     ): Single<ReviewResponse>
+
+    @GET("review")
+    fun loadMovieReviewTyped(
+        @Query(QUERY_PARAM_TOKEN) token: String = TOKEN_DEFAULT,
+        @Query(QUERY_PARAM_LIMIT) limit: Int = SEARCH_FIELD_LIMIT_REVIEW_DEFAULT,
+        @Query(QUERY_PARAM_PAGE) page: Int = PAGE_DEFAULT,
+        @Query(QUERY_PARAM_FIELD) movieId: String = SEARCH_FIELD_MOVIE_ID,
+        @Query(QUERY_PARAM_SEARCH) searchId: Int,
+        @Query(QUERY_PARAM_FIELD) typeParam: String = TYPE_FIELD_DEFAULT,
+        @Query(QUERY_PARAM_SEARCH) searchType: String,
+        ): Single<ReviewResponse>
 
     @GET("image")
     fun loadMovieFrame(
         @Query(QUERY_PARAM_TOKEN) token: String = TOKEN_DEFAULT,
-        @Query(QUERY_PARAM_FIELD) field: String = SEARCH_FIELD_MOVIE_ID,
         @Query(QUERY_PARAM_LIMIT) limit: Int = SEARCH_FIELD_LIMIT_FRAME_DEFAULT,
+        @Query(QUERY_PARAM_FIELD) field: String = SEARCH_FIELD_MOVIE_ID,
         @Query(QUERY_PARAM_SEARCH) searchId: Int,
         ): Single<FrameResponse>
-
 }

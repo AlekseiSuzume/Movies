@@ -1,7 +1,6 @@
 package com.suzume.movies.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,8 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityMainBinding
 import com.suzume.movies.presentation.adapter.movie.MovieAdapter
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,6 +60,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        val menuItemSearch = menu?.findItem(R.id.menuItemSearch)
+        menuItemSearch?.isVisible = false
         return true
     }
 

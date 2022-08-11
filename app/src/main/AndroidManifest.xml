@@ -17,6 +17,12 @@
         android:theme="@style/Theme.Movies"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ReviewListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.PersonListActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.MovieDetailFromDbActivity"
             android:exported="false" />
         <activity

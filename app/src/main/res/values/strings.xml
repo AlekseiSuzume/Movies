@@ -14,4 +14,6 @@
     <string name="tv_frame">Изображения</string>
     <string name="tv_trailers">Трейлеры</string>
     <string name="menu_item_favorite">Избранное</string>
+    <string name="tv_review_list_all">Все</string>
+    <string name="menu_item_search">search</string>
 </resources>

@@ -15,6 +15,9 @@ class ReviewAdapter : ListAdapter<Review, RecyclerView.ViewHolder>(ReviewDiffCal
         const val VIEW_TYPE_SHOW_MORE = 1
     }
 
+    var reviewOnClickListener: (() -> Unit)? = null
+    var onShowMoreClickListener: (() -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
@@ -37,10 +40,16 @@ class ReviewAdapter : ListAdapter<Review, RecyclerView.ViewHolder>(ReviewDiffCal
         if (holder is ReviewViewHolder) {
             holder.bind(review)
         }
+        holder.itemView.setOnClickListener {
+            when (holder.itemViewType) {
+                VIEW_TYPE_REVIEW -> reviewOnClickListener?.invoke()
+                VIEW_TYPE_SHOW_MORE -> onShowMoreClickListener?.invoke()
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position > 4) {
+        return if (position > 3) {
             VIEW_TYPE_SHOW_MORE
         } else {
             VIEW_TYPE_REVIEW
@@ -48,8 +57,8 @@ class ReviewAdapter : ListAdapter<Review, RecyclerView.ViewHolder>(ReviewDiffCal
     }
 
     override fun getItemCount(): Int {
-        return if (currentList.size > 5) {
-            6
+        return if (currentList.size > 4) {
+            5
         } else {
             currentList.size
         }
