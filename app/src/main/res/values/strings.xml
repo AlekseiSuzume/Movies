@@ -16,4 +16,11 @@
     <string name="menu_item_favorite">Избранное</string>
     <string name="tv_review_list_all">Все</string>
     <string name="menu_item_search">search</string>
+    <string name="activity_label_favorite">Избранное</string>
+    <string name="activity_label_actors">Актёры</string>
+    <string name="activity_label_review">Рецензии</string>
+    <string name="activity_label_images">Изображения</string>
+    <string name="btn_imageType_posters">Постеры</string>
+    <string name="btn_imageType_shooting">Съемки</string>
+    <string name="btn_imageType_frames">Кадры</string>
 </resources>

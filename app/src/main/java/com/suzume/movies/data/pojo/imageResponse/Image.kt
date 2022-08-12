@@ -1,9 +1,9 @@
-package com.suzume.movies.data.pojo.frameResponse
+package com.suzume.movies.data.pojo.imageResponse
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Frame(
+data class Image(
     @SerializedName("movieId")
     val movieId: Int,
     @SerializedName("previewUrl")

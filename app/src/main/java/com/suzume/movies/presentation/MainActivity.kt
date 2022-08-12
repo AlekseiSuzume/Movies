@@ -19,8 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         setupOnReachEndListener()
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnMovieClickListener() {
         adapter.onClickListener = {
-            startActivity(MovieDetailActivity.newIntent(this, it.id))
+            startActivity(MovieDetailActivity.newIntent(this, it.id, it.name))
         }
     }
 
@@ -66,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuItemFavoriteMovies){
+        if (item.itemId == R.id.menuItemFavoriteMovies) {
             val intent = FavoriteMoviesActivity.getIntent(this)
             startActivity(intent)
         }

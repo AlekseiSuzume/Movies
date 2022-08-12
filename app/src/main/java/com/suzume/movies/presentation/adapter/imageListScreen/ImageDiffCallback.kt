@@ -1,9 +1,9 @@
-package com.suzume.movies.presentation.adapter.frame
+package com.suzume.movies.presentation.adapter.imageListScreen
 
 import androidx.recyclerview.widget.DiffUtil
 import com.suzume.movies.data.pojo.imageResponse.Image
 
-class FrameDiffCallback : DiffUtil.ItemCallback<Image>() {
+class ImageDiffCallback : DiffUtil.ItemCallback<Image>() {
     override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
         return oldItem.url == newItem.url
     }

@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.suzume.movies.App
 import com.suzume.movies.api.ApiFactory
-import com.suzume.movies.data.pojo.frameResponse.FrameResponse
+import com.suzume.movies.data.pojo.imageResponse.ImageResponse
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import com.suzume.movies.data.pojo.reviewResponse.ReviewResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -29,8 +29,8 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
     val reviewList: LiveData<ReviewResponse>
         get() = _reviewList
 
-    private val _frameList = MutableLiveData<FrameResponse>()
-    val frameList: LiveData<FrameResponse>
+    private val _frameList = MutableLiveData<ImageResponse>()
+    val frameList: LiveData<ImageResponse>
         get() = _frameList
 
     fun getFavoriteMovie(movieId: Int): LiveData<MovieDetail> {
@@ -101,8 +101,8 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
         return apiService.loadMovieReviewAll(searchId = id)
     }
 
-    private fun loadFrame(id: Int): Single<FrameResponse> {
-        return apiService.loadMovieFrame(searchId = id)
+    private fun loadFrame(id: Int): Single<ImageResponse> {
+        return apiService.loadMovieImage(searchId = id)
     }
 
     override fun onCleared() {

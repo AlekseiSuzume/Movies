@@ -1,6 +1,6 @@
 package com.suzume.movies.api
 
-import com.suzume.movies.data.pojo.frameResponse.FrameResponse
+import com.suzume.movies.data.pojo.imageResponse.ImageResponse
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import com.suzume.movies.data.pojo.movieShortResponse.MovieResponse
 import com.suzume.movies.data.pojo.reviewResponse.ReviewResponse
@@ -32,7 +32,7 @@ interface ApiService {
 
         const val SEARCH_FIELD_MOVIE_ID = "movieId"
         const val SEARCH_FIELD_LIMIT_REVIEW_DEFAULT = 5
-        const val SEARCH_FIELD_LIMIT_FRAME_DEFAULT = 500
+        const val SEARCH_FIELD_LIMIT_IMAGE_DEFAULT = 30
     }
 
     @GET("movie")
@@ -75,10 +75,11 @@ interface ApiService {
         ): Single<ReviewResponse>
 
     @GET("image")
-    fun loadMovieFrame(
+    fun loadMovieImage(
         @Query(QUERY_PARAM_TOKEN) token: String = TOKEN_DEFAULT,
-        @Query(QUERY_PARAM_LIMIT) limit: Int = SEARCH_FIELD_LIMIT_FRAME_DEFAULT,
+        @Query(QUERY_PARAM_LIMIT) limit: Int = SEARCH_FIELD_LIMIT_IMAGE_DEFAULT,
+        @Query(QUERY_PARAM_PAGE) page: Int = PAGE_DEFAULT,
         @Query(QUERY_PARAM_FIELD) field: String = SEARCH_FIELD_MOVIE_ID,
         @Query(QUERY_PARAM_SEARCH) searchId: Int,
-        ): Single<FrameResponse>
+        ): Single<ImageResponse>
 }

@@ -35,9 +35,9 @@ class ReviewListActivity : AppCompatActivity() {
     private var flagType = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityReviewListBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding =
+            ActivityReviewListBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         setupOnReachEndListener()
@@ -92,35 +92,6 @@ class ReviewListActivity : AppCompatActivity() {
         binding.rvReviewList.visibility = View.VISIBLE
     }
 
-
-    private fun setButtonBackground(reviewType: Int) {
-        when (reviewType) {
-            ALL_REVIEW -> {
-                reviewAllButtonOn()
-                reviewPositiveButtonOff()
-                reviewNegativeButtonOff()
-                reviewNeutralButtonOff()
-            }
-            POSITIVE_REVIEW -> {
-                reviewPositiveButtonOn()
-                reviewAllButtonOff()
-                reviewNegativeButtonOff()
-                reviewNeutralButtonOff()
-            }
-            NEGATIVE_REVIEW -> {
-                reviewNegativeButtonOn()
-                reviewAllButtonOff()
-                reviewPositiveButtonOff()
-                reviewNeutralButtonOff()
-            }
-            NEUTRAL_REVIEW -> {
-                reviewNeutralButtonOn()
-                reviewAllButtonOff()
-                reviewPositiveButtonOff()
-                reviewNegativeButtonOff()
-            }
-        }
-    }
 
     private fun reviewAllButtonOn() {
         binding.cvReviewAll.setCardBackgroundColor(resources.getColor(R.color.black, theme))
@@ -206,7 +177,36 @@ class ReviewListActivity : AppCompatActivity() {
         flagType = NEUTRAL_REVIEW
     }
 
-    private fun removeRecyclerAnimation(){
+    private fun setButtonBackground(reviewType: Int) {
+        when (reviewType) {
+            ALL_REVIEW -> {
+                reviewAllButtonOn()
+                reviewPositiveButtonOff()
+                reviewNegativeButtonOff()
+                reviewNeutralButtonOff()
+            }
+            POSITIVE_REVIEW -> {
+                reviewPositiveButtonOn()
+                reviewAllButtonOff()
+                reviewNegativeButtonOff()
+                reviewNeutralButtonOff()
+            }
+            NEGATIVE_REVIEW -> {
+                reviewNegativeButtonOn()
+                reviewAllButtonOff()
+                reviewPositiveButtonOff()
+                reviewNeutralButtonOff()
+            }
+            NEUTRAL_REVIEW -> {
+                reviewNeutralButtonOn()
+                reviewAllButtonOff()
+                reviewPositiveButtonOff()
+                reviewNegativeButtonOff()
+            }
+        }
+    }
+
+    private fun removeRecyclerAnimation() {
         binding.rvReviewList.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {

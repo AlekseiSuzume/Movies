@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.suzume.movies.data.pojo.movieDetailResponse.Person
 import com.suzume.movies.databinding.ActorItemLargeBinding
 
-class PersonAdapter : ListAdapter<Person, PersonViewHolder>(PersonDiffCallback()) {
+class PersonListScreenAdapter : ListAdapter<Person, PersonViewHolder>(PersonDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
         val inflater = LayoutInflater.from(parent.context)

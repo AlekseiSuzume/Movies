@@ -9,7 +9,7 @@ import androidx.appcompat.widget.SearchView
 import com.suzume.movies.R
 import com.suzume.movies.data.pojo.movieDetailResponse.Person
 import com.suzume.movies.databinding.ActivityPersonListBinding
-import com.suzume.movies.presentation.adapter.personListScreen.PersonAdapter
+import com.suzume.movies.presentation.adapter.personListScreen.PersonListScreenAdapter
 
 class PersonListActivity : AppCompatActivity() {
 
@@ -28,13 +28,13 @@ class PersonListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPersonListBinding
     private lateinit var persons: List<Person>
     private lateinit var label: String
-    private lateinit var adapter: PersonAdapter
+    private lateinit var adapter: PersonListScreenAdapter
     private var searchTextLenght = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityPersonListBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding =
+            ActivityPersonListBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
 
@@ -44,7 +44,7 @@ class PersonListActivity : AppCompatActivity() {
         persons = intent.getParcelableArrayListExtra<Person>(EXTRA_PERSONS)!!
         label = intent.getStringExtra(EXTRA_PROFESSION).toString()
         binding.tvLabel.text = label
-        adapter = PersonAdapter()
+        adapter = PersonListScreenAdapter()
         adapter.submitList(persons)
         binding.rvPersonList.adapter = adapter
     }
@@ -61,15 +61,17 @@ class PersonListActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 val tempList = mutableListOf<Person>()
-                if (newText == null || newText.isEmpty()){
+                if (newText == null || newText.isEmpty()) {
                     tempList.addAll(persons)
-                }else{
+                } else {
                     val filterPattern = newText.lowercase()
                     tempList.addAll(
-                    persons.filter { it.name?.lowercase()?.contains(filterPattern) == true }
+                        persons.filter { it.name?.lowercase()?.contains(filterPattern) == true }
                     )
                     tempList.addAll(
-                        persons.filter { it.description?.lowercase()?.contains(filterPattern) == true }
+                        persons.filter {
+                            it.description?.lowercase()?.contains(filterPattern) == true
+                        }
                     )
                 }
                 adapter.submitList(tempList)

@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.FrameItemBinding
 import com.suzume.movies.databinding.ShowMoreItemFrameBinding
-import com.suzume.movies.data.pojo.frameResponse.Frame
+import com.suzume.movies.data.pojo.imageResponse.Image
 
-class FrameAdapter : ListAdapter<Frame, RecyclerView.ViewHolder>(FrameDiffCallback()) {
+class FrameAdapter : ListAdapter<Image, RecyclerView.ViewHolder>(FrameDiffCallback()) {
 
     private companion object {
         const val VIEW_TYPE_FRAME = 0

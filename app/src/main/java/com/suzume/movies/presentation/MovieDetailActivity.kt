@@ -32,9 +32,11 @@ class MovieDetailActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_FROM_ID = "id"
-        fun newIntent(context: Context, fromId: Int): Intent {
+        private const val EXTRA_FROM_NAME = "name"
+        fun newIntent(context: Context, fromId: Int, movieName: String): Intent {
             return Intent(context, MovieDetailActivity::class.java)
                 .putExtra(EXTRA_FROM_ID, fromId)
+                .putExtra(EXTRA_FROM_NAME, movieName)
         }
     }
 
@@ -48,18 +50,21 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var viewModel: MovieDetailViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMovieDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding =
+            ActivityMovieDetailBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         loadMovieDetail()
         setupOnClickPersonListener()
         setupOnClickShowMoreListener()
+
     }
 
 
     private fun init() {
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
+       val movieName = intent.getStringExtra(EXTRA_FROM_NAME) ?: "Movies"
+        supportActionBar?.title = movieName
         viewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
 
         viewModel.refreshMovieDetailLiveData(movieId)
@@ -225,6 +230,10 @@ class MovieDetailActivity : AppCompatActivity() {
                         movieId
                     ))
                 }
+
+                llFrame.setOnClickListener {
+                    startActivity(ImageListActivity.getIntent(this@MovieDetailActivity, movieId))
+                }
                 trailerAdapter.submitList(videos.trailers)
                 tvTrailerCount.text = videos.trailers.size.toString()
                 favoriteObserver(movieDetail)
@@ -239,7 +248,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
 
         viewModel.frameList.observe(this) {
-            frameAdapter.submitList(it.frames)
+            frameAdapter.submitList(it.images)
             binding.tvFrameCount.text = it.total.toString()
         }
     }

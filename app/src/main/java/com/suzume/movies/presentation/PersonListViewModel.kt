@@ -7,8 +7,4 @@ import com.suzume.movies.api.ApiFactory
 
 class PersonListViewModel(application: Application) : AndroidViewModel(application) {
     private val apiService = ApiFactory.getApiService()
-
-    fun personSearch(){
-
-    }
 }

@@ -12,7 +12,7 @@ import com.suzume.movies.presentation.adapter.favoriteMovieAdaper.FavoriteMovieA
 
 class FavoriteMoviesActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, FavoriteMoviesActivity::class.java)
         }
@@ -24,9 +24,10 @@ class FavoriteMoviesActivity : AppCompatActivity() {
     lateinit var adapter: FavoriteMovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityFavoriteBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding =
+            ActivityFavoriteBinding.inflate(layoutInflater).also { setContentView(it.root) }
+
         viewModel = ViewModelProvider(this)[FavoriteMoviesActivityViewModel::class.java]
         recyclerView = binding.rvFavoriteMovies
         recyclerView.layoutManager = GridLayoutManager(
@@ -36,7 +37,7 @@ class FavoriteMoviesActivity : AppCompatActivity() {
             false)
         adapter = FavoriteMovieAdapter()
         recyclerView.adapter = adapter
-        viewModel.allFavoriteMovies.observe(this){
+        viewModel.allFavoriteMovies.observe(this) {
             adapter.submitList(it)
         }
 

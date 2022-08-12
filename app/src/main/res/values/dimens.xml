@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="customRoundedImageView" parent="">
+    <style name="customRounded4dp" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">4dp</item>
         <item name="cornerSizeTopRight">4dp</item>
@@ -9,7 +9,7 @@
         <item name="cornerSizeBottomRight">4dp</item>
     </style>
 
-    <style name="customRoundedImageViewFrame" parent="">
+    <style name="customRounded8dp" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">8dp</item>
         <item name="cornerSizeTopRight">8dp</item>
@@ -17,7 +17,7 @@
         <item name="cornerSizeBottomRight">8dp</item>
     </style>
 
-    <style name="customRounded" parent="">
+    <style name="customRounded2dp" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">2dp</item>
         <item name="cornerSizeTopRight">2dp</item>

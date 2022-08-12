@@ -12,6 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:adjustViewBounds="true"
-        app:shapeAppearanceOverlay="@style/customRoundedImageViewFrame" />
+        app:shapeAppearanceOverlay="@style/customRounded8dp" />
 
 </androidx.cardview.widget.CardView>

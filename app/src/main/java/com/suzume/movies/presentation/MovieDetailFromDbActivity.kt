@@ -41,9 +41,9 @@ class MovieDetailFromDbActivity : AppCompatActivity() {
     private var movieId by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityMovieDetailFromDbBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding = ActivityMovieDetailFromDbBinding.inflate(layoutInflater)
+            .also { setContentView(it.root) }
 
         init()
         initSetupContent()

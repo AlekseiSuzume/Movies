@@ -1,11 +1,11 @@
-package com.suzume.movies.data.pojo.frameResponse
+package com.suzume.movies.data.pojo.imageResponse
 
 
 import com.google.gson.annotations.SerializedName
 
-data class FrameResponse(
+data class ImageResponse(
     @SerializedName("docs")
-    val frames: List<Frame>,
+    val images: List<Image>,
     @SerializedName("page")
     val page: Int,
     @SerializedName("pages")
