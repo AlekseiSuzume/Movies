@@ -26,7 +26,7 @@ class PersonListActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityPersonListBinding
-    private lateinit var persons: List<Person>
+    private var persons = mutableListOf<Person>()
     private lateinit var label: String
     private lateinit var adapter: PersonListScreenAdapter
     private var searchTextLenght = 0
@@ -41,7 +41,8 @@ class PersonListActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        persons = intent.getParcelableArrayListExtra<Person>(EXTRA_PERSONS)!!
+        intent.getParcelableArrayListExtra<Person>(EXTRA_PERSONS)
+            ?.let { persons.addAll(it) }
         label = intent.getStringExtra(EXTRA_PROFESSION).toString()
         binding.tvLabel.text = label
         adapter = PersonListScreenAdapter()

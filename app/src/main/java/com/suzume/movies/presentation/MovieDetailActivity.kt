@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.suzume.movies.R
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import com.suzume.movies.data.pojo.movieDetailResponse.Person
+import com.suzume.movies.data.pojo.movieDetailResponse.Trailer
 import com.suzume.movies.databinding.ActivityMovieDetailBinding
 import com.suzume.movies.presentation.adapter.actor.ActorAdapter
 import com.suzume.movies.presentation.adapter.frame.FrameAdapter
@@ -60,10 +61,9 @@ class MovieDetailActivity : AppCompatActivity() {
 
     }
 
-
     private fun init() {
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
-       val movieName = intent.getStringExtra(EXTRA_FROM_NAME) ?: "Movies"
+        val movieName = intent.getStringExtra(EXTRA_FROM_NAME) ?: "Movies"
         supportActionBar?.title = movieName
         viewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
 
@@ -233,6 +233,13 @@ class MovieDetailActivity : AppCompatActivity() {
 
                 llFrame.setOnClickListener {
                     startActivity(ImageListActivity.getIntent(this@MovieDetailActivity, movieId))
+                }
+
+                llTrailer.setOnClickListener {
+                    startActivity(TrailerListActivity.getIntent(
+                        this@MovieDetailActivity,
+                        videos.trailers as ArrayList<Trailer>
+                    ))
                 }
                 trailerAdapter.submitList(videos.trailers)
                 tvTrailerCount.text = videos.trailers.size.toString()

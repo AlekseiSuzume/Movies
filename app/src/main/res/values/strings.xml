@@ -23,4 +23,5 @@
     <string name="btn_imageType_posters">Постеры</string>
     <string name="btn_imageType_shooting">Съемки</string>
     <string name="btn_imageType_frames">Кадры</string>
+    <string name="activity_label_trailers">Трейлеры</string>
 </resources>

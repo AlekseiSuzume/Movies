@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.ActorItemBinding
-import com.suzume.movies.databinding.ShowMoreItemBinding
+import com.suzume.movies.databinding.ShowMoreItemActorBinding
 import com.suzume.movies.data.pojo.movieDetailResponse.Person
 
 class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallback()) {
@@ -27,7 +27,7 @@ class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallb
                 ActorViewHolder(binding)
             }
             VIEW_TYPE_SHOW_MORE -> {
-                val binding = ShowMoreItemBinding
+                val binding = ShowMoreItemActorBinding
                     .inflate(inflater, parent, false)
                 ShowMoreActorViewHolder(binding)
             }
