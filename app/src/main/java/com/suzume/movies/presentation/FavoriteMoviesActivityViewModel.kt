@@ -31,4 +31,10 @@ class FavoriteMoviesActivityViewModel(application: Application) : AndroidViewMod
             })
         compositeDisposable.add(disposable)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
+    }
+
 }

@@ -18,6 +18,7 @@ class PersonListActivity : AppCompatActivity() {
         private const val EXTRA_PROFESSION = "profession"
         const val ACTOR = "Актёр"
         const val MOVIE_TEAM = "Съёмочная группа"
+
         fun getIntent(context: Context, persons: ArrayList<Person>, profession: String): Intent {
             return Intent(context, PersonListActivity::class.java)
                 .putParcelableArrayListExtra(EXTRA_PERSONS, persons)
@@ -29,7 +30,6 @@ class PersonListActivity : AppCompatActivity() {
     private var persons = mutableListOf<Person>()
     private lateinit var label: String
     private lateinit var adapter: PersonListScreenAdapter
-    private var searchTextLenght = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class PersonListActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.main_menu, menu)
         val menuItem = menu?.findItem(R.id.menuItemSearch)
         val searchView = menuItem?.actionView as SearchView
-        searchView.queryHint = "Enter name..."
+        searchView.queryHint = resources.getString(R.string.search_person)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false

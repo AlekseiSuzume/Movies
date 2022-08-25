@@ -18,13 +18,4 @@ class CountryConverter {
         return gson.fromJson(json, Array<Country>::class.java).toList()
     }
 
-//    @TypeConverter
-//    fun countryListToJson(countryList: List<Country>): String {
-//        return gson.toJson(countryList, object : TypeToken<ArrayList<Country>>(){}.type)
-//    }
-//
-//    @TypeConverter
-//    fun countryListFromJson(string: String): List<Country> {
-//        return gson.fromJson(string, object : TypeToken<List<Country>>(){}.type)
-//    }
 }

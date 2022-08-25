@@ -24,4 +24,7 @@
     <string name="btn_imageType_shooting">Съемки</string>
     <string name="btn_imageType_frames">Кадры</string>
     <string name="activity_label_trailers">Трейлеры</string>
+    <string name="label_review">Отзыв</string>
+    <string name="search_person">Введите имя…</string>
+    <string name="search_movie">Введите название фильма…</string>
 </resources>

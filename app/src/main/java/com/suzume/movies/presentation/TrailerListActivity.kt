@@ -12,12 +12,11 @@ import com.suzume.movies.presentation.adapter.trailerListScreen.TrailerListScree
 class TrailerListActivity : AppCompatActivity() {
 
     companion object {
-
-        private const val EXTRA_FROM_TRAILERS = "trailers"
+        private const val EXTRA_TRAILERS = "trailers"
 
         fun getIntent(context: Context, trailers: ArrayList<Trailer>): Intent {
             return Intent(context, TrailerListActivity::class.java)
-                .putParcelableArrayListExtra(EXTRA_FROM_TRAILERS, trailers)
+                .putParcelableArrayListExtra(EXTRA_TRAILERS, trailers)
         }
     }
 
@@ -35,7 +34,7 @@ class TrailerListActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        intent.getParcelableArrayListExtra<Trailer>(EXTRA_FROM_TRAILERS)
+        intent.getParcelableArrayListExtra<Trailer>(EXTRA_TRAILERS)
             ?.let { trailers.addAll(it) }
         adapter.submitList(trailers)
         binding.rvTrailerScreen.adapter = adapter

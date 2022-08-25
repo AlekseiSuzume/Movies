@@ -3,6 +3,7 @@ package com.suzume.movies.presentation
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface.BOLD
+import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -23,7 +24,7 @@ import com.suzume.movies.data.pojo.movieDetailResponse.Person
 import com.suzume.movies.data.pojo.movieDetailResponse.Trailer
 import com.suzume.movies.databinding.ActivityMovieDetailBinding
 import com.suzume.movies.presentation.adapter.actor.ActorAdapter
-import com.suzume.movies.presentation.adapter.frame.FrameAdapter
+import com.suzume.movies.presentation.adapter.image.ImageAdapter
 import com.suzume.movies.presentation.adapter.movieTeam.MovieTeamAdapter
 import com.suzume.movies.presentation.adapter.review.ReviewAdapter
 import com.suzume.movies.presentation.adapter.trailer.TrailerAdapter
@@ -32,12 +33,13 @@ import kotlin.properties.Delegates
 class MovieDetailActivity : AppCompatActivity() {
 
     companion object {
-        private const val EXTRA_FROM_ID = "id"
-        private const val EXTRA_FROM_NAME = "name"
+        private const val EXTRA_ID = "id"
+        private const val EXTRA_NAME = "movieName"
+
         fun newIntent(context: Context, fromId: Int, movieName: String): Intent {
             return Intent(context, MovieDetailActivity::class.java)
-                .putExtra(EXTRA_FROM_ID, fromId)
-                .putExtra(EXTRA_FROM_NAME, movieName)
+                .putExtra(EXTRA_ID, fromId)
+                .putExtra(EXTRA_NAME, movieName)
         }
     }
 
@@ -45,9 +47,10 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var actorAdapter: ActorAdapter
     private lateinit var movieTeamAdapter: MovieTeamAdapter
     private lateinit var reviewAdapter: ReviewAdapter
-    private lateinit var frameAdapter: FrameAdapter
+    private lateinit var imageAdapter: ImageAdapter
     private lateinit var trailerAdapter: TrailerAdapter
     private var movieId by Delegates.notNull<Int>()
+    private var movieName by Delegates.notNull<String>()
     private lateinit var viewModel: MovieDetailViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,20 +59,20 @@ class MovieDetailActivity : AppCompatActivity() {
 
         init()
         loadMovieDetail()
-        setupOnClickPersonListener()
-        setupOnClickShowMoreListener()
+        setupOnClickListener()
+        setupOnShowMoreClickListener()
 
     }
 
     private fun init() {
-        movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
-        val movieName = intent.getStringExtra(EXTRA_FROM_NAME) ?: "Movies"
+        movieId = intent.getIntExtra(EXTRA_ID, 0)
+        movieName = intent.getStringExtra(EXTRA_NAME) ?: "Movies"
         supportActionBar?.title = movieName
         viewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
 
         viewModel.refreshMovieDetailLiveData(movieId)
         viewModel.refreshReviewLiveData(movieId)
-        viewModel.refreshFrameLiveData(movieId)
+        viewModel.refreshImageLiveData(movieId)
 
         actorAdapter = ActorAdapter()
         binding.rvActors.adapter = actorAdapter
@@ -96,8 +99,8 @@ class MovieDetailActivity : AppCompatActivity() {
             false
         )
 
-        frameAdapter = FrameAdapter()
-        binding.rvFrame.adapter = frameAdapter
+        imageAdapter = ImageAdapter()
+        binding.rvFrame.adapter = imageAdapter
         binding.rvFrame.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
@@ -144,8 +147,8 @@ class MovieDetailActivity : AppCompatActivity() {
                     root.resources.getString(
                         R.string.tvYearGenresCountriesLength,
                         year.toString(),
-                        genres.map { name }.distinct().joinToString(", "),
-                        countries.map { name }.distinct().joinToString(", "),
+                        genres.map { it.name }.distinct().joinToString(", "),
+                        countries.map { it.name }.distinct().joinToString(", "),
                         (movieLength / 60).toString(),
                         (movieLength - ((movieLength / 60) * 60))
                     )
@@ -227,7 +230,8 @@ class MovieDetailActivity : AppCompatActivity() {
                 llReview.setOnClickListener {
                     startActivity(ReviewListActivity.getIntent(
                         this@MovieDetailActivity,
-                        movieId
+                        movieId,
+                        movieName
                     ))
                 }
 
@@ -238,11 +242,11 @@ class MovieDetailActivity : AppCompatActivity() {
                 llTrailer.setOnClickListener {
                     startActivity(TrailerListActivity.getIntent(
                         this@MovieDetailActivity,
-                        videos.trailers as ArrayList<Trailer>
+                        videos?.trailers as ArrayList<Trailer>
                     ))
                 }
-                trailerAdapter.submitList(videos.trailers)
-                tvTrailerCount.text = videos.trailers.size.toString()
+                trailerAdapter.submitList(videos?.trailers)
+                tvTrailerCount.text = (videos?.trailers?.size ?: 0).toString()
                 favoriteObserver(movieDetail)
             }
             binding.root.visibility = View.VISIBLE
@@ -254,8 +258,8 @@ class MovieDetailActivity : AppCompatActivity() {
         }
 
 
-        viewModel.frameList.observe(this) {
-            frameAdapter.submitList(it.images)
+        viewModel.imageList.observe(this) {
+            imageAdapter.submitList(it.images)
             binding.tvFrameCount.text = it.total.toString()
         }
     }
@@ -282,8 +286,8 @@ class MovieDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun setupOnClickShowMoreListener() {
-        actorAdapter.showMoreOnClickListener = {
+    private fun setupOnShowMoreClickListener() {
+        actorAdapter.onShowMoreClickListener = {
             startActivity(PersonListActivity.getIntent(
                 this,
                 actorAdapter.currentList.toList() as ArrayList<Person>,
@@ -298,13 +302,32 @@ class MovieDetailActivity : AppCompatActivity() {
             ))
         }
         reviewAdapter.onShowMoreClickListener = {
-            startActivity(ReviewListActivity.getIntent(this, movieId))
+            startActivity(ReviewListActivity.getIntent(this, movieId, movieName))
         }
+        imageAdapter.onShowMoreClickListener = {
+            startActivity(ImageListActivity.getIntent(this, movieId))
+        }
+        trailerAdapter.onShowMoreItemClickListener = {
+            startActivity(TrailerListActivity.getIntent(
+                this@MovieDetailActivity,
+                trailerAdapter.currentList.toList() as ArrayList<Trailer>
+            ))
+        }
+
     }
 
-    private fun setupOnClickPersonListener() {
-        actorAdapter.actorOnClickListener = {
-            Toast.makeText(this, "OnClickPersonListener", Toast.LENGTH_SHORT).show()
+    private fun setupOnClickListener() {
+        actorAdapter.onActorClickListener = {
+            //TODO
+        }
+        reviewAdapter.onReviewClickListener = {
+            startActivity(ReviewFullActivity.getIntent(this, it, movieName))
+        }
+        imageAdapter.onImageClickListener = {
+            startActivity(ImageFullActivity.getIntent(this, it.url))
+        }
+        trailerAdapter.onTrailerItemClickListener = {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.url)))
         }
     }
 

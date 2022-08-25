@@ -1,11 +1,10 @@
 package com.suzume.movies.presentation.adapter.trailer
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
-import com.suzume.movies.databinding.TrailerItemBinding
 import com.suzume.movies.data.pojo.movieDetailResponse.Trailer
+import com.suzume.movies.databinding.TrailerItemBinding
 
 class TrailerViewHolder(val binding: TrailerItemBinding) :
     RecyclerView.ViewHolder(binding.root) {

@@ -3,6 +3,7 @@ package com.suzume.movies.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
@@ -16,20 +17,24 @@ class ReviewListActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_FROM_ID = "movieId"
-        fun getIntent(context: Context, movieId: Int): Intent {
-            return Intent(context, ReviewListActivity::class.java)
-                .putExtra(EXTRA_FROM_ID, movieId)
-        }
+        private const val EXTRA_MOVIE_NAME = "movieName"
 
         private const val ALL_REVIEW = 0
         private const val POSITIVE_REVIEW = 1
         private const val NEGATIVE_REVIEW = 2
         private const val NEUTRAL_REVIEW = 3
 
+        fun getIntent(context: Context, movieId: Int, movieName: String): Intent {
+            return Intent(context, ReviewListActivity::class.java)
+                .putExtra(EXTRA_FROM_ID, movieId)
+                .putExtra(EXTRA_MOVIE_NAME, movieName)
+        }
+
     }
 
     private lateinit var binding: ActivityReviewListBinding
     private var movieId by Delegates.notNull<Int>()
+    private var movieName by Delegates.notNull<String>()
     private lateinit var viewModel: ReviewListViewModel
     private lateinit var adapter: ReviewListScreenAdapter
     private var flagType = 0
@@ -41,6 +46,7 @@ class ReviewListActivity : AppCompatActivity() {
 
         init()
         setupOnReachEndListener()
+        setupReviewOnClickListener()
 
         binding.cvReviewAll.setOnClickListener {
             reviewAllOnClickListener()
@@ -60,6 +66,7 @@ class ReviewListActivity : AppCompatActivity() {
 
     private fun init() {
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
+        movieName = intent.getStringExtra(EXTRA_MOVIE_NAME) ?: "Movies"
         viewModel = ViewModelProvider(this)[ReviewListViewModel::class.java]
         adapter = ReviewListScreenAdapter()
         binding.rvReviewList.adapter = adapter
@@ -91,7 +98,6 @@ class ReviewListActivity : AppCompatActivity() {
         setButtonBackground(ALL_REVIEW)
         binding.rvReviewList.visibility = View.VISIBLE
     }
-
 
     private fun reviewAllButtonOn() {
         binding.cvReviewAll.setCardBackgroundColor(resources.getColor(R.color.black, theme))
@@ -224,6 +230,13 @@ class ReviewListActivity : AppCompatActivity() {
                 NEGATIVE_REVIEW -> viewModel.refreshReviewNegativeList(movieId)
                 NEUTRAL_REVIEW -> viewModel.refreshReviewNeutralList(movieId)
             }
+        }
+    }
+
+    private fun setupReviewOnClickListener() {
+        adapter.reviewOnClickListener = {
+            Log.d("test", it.toString())
+            startActivity(ReviewFullActivity.getIntent(this, it, movieName))
         }
     }
 

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.imageview.ShapeableImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/imageView"
-    android:layout_margin="4dp"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:adjustViewBounds="true"
-    app:shapeAppearanceOverlay="@style/customRounded8dp">
+    android:layout_height="200dp"
+    app:cardCornerRadius="8dp"
+    android:visibility="visible"
+    app:cardUseCompatPadding="true">
 
-</com.google.android.material.imageview.ShapeableImageView>
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivMovieFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        app:shapeAppearanceOverlay="@style/customRounded8dp" />
+
+</com.google.android.material.card.MaterialCardView>

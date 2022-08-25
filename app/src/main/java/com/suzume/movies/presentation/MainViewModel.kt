@@ -5,9 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.suzume.movies.App
 import com.suzume.movies.api.ApiFactory
-import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
 import com.suzume.movies.data.pojo.movieShortResponse.Movie
 import com.suzume.movies.data.pojo.movieShortResponse.MovieResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -24,11 +22,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val movies: LiveData<List<Movie>>
         get() = _movies
 
+    private val _searchMovies = MutableLiveData<List<Movie>>()
+    val searchMovies: LiveData<List<Movie>>
+        get() = _searchMovies
+
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
     private var page = 1
+    private var tempName = ""
 
     init {
         refreshMoviesLiveData()
@@ -52,13 +55,49 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _movies.value = _movies.value?.plus(it.movies) ?: it.movies
                 page++
             }, {
-                Log.d("MainViewModel:refreshLiveData", it.toString())
+                Log.d("MainViewModel", it.toString())
+            })
+        compositeDisposable.add(disposable)
+    }
+
+    fun refreshSearchMovieLiveData(name: String) {
+        val loading = isLoading.value
+        if (loading != null && loading) {
+            return
+        }
+        if (tempName != name) {
+            page = 1
+            tempName = name
+        }
+        val disposable = loadSearchData(tempName, page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                _isLoading.postValue(true)
+            }
+            .doAfterTerminate {
+                _isLoading.postValue(false)
+            }
+            .subscribe({
+                if (page > 1) {
+                    _searchMovies.value = _searchMovies.value?.plus(it.movies) ?: it.movies
+                    page++
+                } else {
+                    _searchMovies.value = it.movies
+                    page++
+                }
+            }, {
+                Log.d("MainViewModel", it.toString())
             })
         compositeDisposable.add(disposable)
     }
 
     private fun loadData(page: Int): Single<MovieResponse> {
         return apiService.loadMovies(page = page)
+    }
+
+    private fun loadSearchData(name: String, page: Int): Single<MovieResponse> {
+        return apiService.searchMovie(searchName = name, page = page)
     }
 
     override fun onCleared() {

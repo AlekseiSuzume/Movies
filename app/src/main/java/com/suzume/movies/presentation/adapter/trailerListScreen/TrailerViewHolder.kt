@@ -11,6 +11,8 @@ class TrailerViewHolder(val binding: TrailerItemLargeBinding) :
 
     fun bind(trailer: Trailer) {
 
+        binding.tvTrailerNameListScreen.text = trailer.name
+
         val thumbnail = if (trailer.site == "youtube") {
             val videoId = trailer.url
                 .substringAfterLast("=", trailer.url.substringAfterLast("/"))
@@ -18,12 +20,9 @@ class TrailerViewHolder(val binding: TrailerItemLargeBinding) :
         } else {
             R.drawable.play_icon
         }
-
         Glide.with(binding.root)
             .load(thumbnail)
             .placeholder(R.drawable.play_icon)
             .into(binding.ivTrailerPreviewLarge)
-
-        binding.tvTrailerNameListScreen.text = trailer.name
     }
 }

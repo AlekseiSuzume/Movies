@@ -41,19 +41,10 @@ data class MovieDetail(
     val typeNumber: Int,
     @SerializedName("videos")
     @Embedded
-    val videos: Videos,
+    val videos: Videos?,
     @SerializedName("votes")
     @Embedded
     val votes: Votes,
     @SerializedName("year")
     val year: Int,
-//    @SerializedName("similarMovies")
-//    @Embedded
-//    val SimilarMovies: List<SimilarMovie>,
-//    @SerializedName("sequelsAndPrequels")
-//    @Embedded
-//    val sequelsAndPrequels: List<Movie>,
-//    @SerializedName("seasonsInfo")
-//    @Embedded
-//    val seasonsInfo: List<Season>,
 )
