@@ -1,6 +1,7 @@
 package com.suzume.movies.presentation
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -69,7 +70,7 @@ class ReviewListViewModel(application: Application) : AndroidViewModel(applicati
                 allPage++
                 _allReviewCount.value = it.total
             }, {
-
+                Log.d("ReviewListViewModel", it.toString())
             })
         compositeDisposable.add(disposable)
     }
@@ -84,7 +85,7 @@ class ReviewListViewModel(application: Application) : AndroidViewModel(applicati
                 positivePage++
                 _positiveReviewCount.value = it.total
             }, {
-
+                Log.d("ReviewListViewModel", it.toString())
             })
         compositeDisposable.add(disposable)
     }
@@ -99,7 +100,7 @@ class ReviewListViewModel(application: Application) : AndroidViewModel(applicati
                 negativePage++
                 _negativeReviewCount.value = it.total
             }, {
-
+                Log.d("ReviewListViewModel", it.toString())
             })
         compositeDisposable.add(disposable)
     }
@@ -113,7 +114,7 @@ class ReviewListViewModel(application: Application) : AndroidViewModel(applicati
                 neutralPage++
                 _neutralReviewCount.value = it.total
             }, {
-
+                Log.d("ReviewListViewModel", it.toString())
             })
         compositeDisposable.add(disposable)
     }
@@ -132,7 +133,7 @@ class ReviewListViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     override fun onCleared() {
-        compositeDisposable.dispose()
         super.onCleared()
+        compositeDisposable.dispose()
     }
 }

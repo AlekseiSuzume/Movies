@@ -1,6 +1,7 @@
 package com.suzume.movies.presentation
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,7 +31,9 @@ class ImageListViewModel(application: Application) : AndroidViewModel(applicatio
             .subscribe({
                 _imagesList.value = _imagesList.value?.plus(it.images) ?: it.images
                 page++
-            }, {})
+            }, {
+                Log.d("ImageListViewModel", it.toString())
+            })
         compositeDisposable.add(disposable)
     }
 
@@ -39,7 +42,7 @@ class ImageListViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     override fun onCleared() {
-        compositeDisposable.dispose()
         super.onCleared()
+        compositeDisposable.dispose()
     }
 }

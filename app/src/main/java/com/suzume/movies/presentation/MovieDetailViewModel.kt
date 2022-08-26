@@ -30,7 +30,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
         get() = _reviewList
 
     private val _frameList = MutableLiveData<ImageResponse>()
-    val frameList: LiveData<ImageResponse>
+    val imageList: LiveData<ImageResponse>
         get() = _frameList
 
     fun getFavoriteMovie(movieId: Int): LiveData<MovieDetail> {
@@ -81,8 +81,8 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
         compositeDisposable.add(disposable)
     }
 
-    fun refreshFrameLiveData(id: Int) {
-        val disposable = loadFrame(id)
+    fun refreshImageLiveData(id: Int) {
+        val disposable = loadImage(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -101,7 +101,7 @@ class MovieDetailViewModel(application: Application) : AndroidViewModel(applicat
         return apiService.loadMovieReviewAll(searchId = id)
     }
 
-    private fun loadFrame(id: Int): Single<ImageResponse> {
+    private fun loadImage(id: Int): Single<ImageResponse> {
         return apiService.loadMovieImage(searchId = id)
     }
 

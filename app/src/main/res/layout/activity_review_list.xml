@@ -8,7 +8,7 @@
     android:paddingVertical="16dp"
     tools:context=".presentation.ReviewListActivity">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvReviewAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,9 +47,9 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvReviewPositive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,9 +86,9 @@
                 tools:text="1000" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvReviewNegative"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -125,9 +125,9 @@
                 tools:text="1000" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvReviewNeutral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                 tools:text="1000" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvReviewList"

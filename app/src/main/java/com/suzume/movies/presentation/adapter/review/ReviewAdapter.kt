@@ -15,7 +15,7 @@ class ReviewAdapter : ListAdapter<Review, RecyclerView.ViewHolder>(ReviewDiffCal
         const val VIEW_TYPE_SHOW_MORE = 1
     }
 
-    var reviewOnClickListener: (() -> Unit)? = null
+    var onReviewClickListener: ((review: Review) -> Unit)? = null
     var onShowMoreClickListener: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -42,7 +42,7 @@ class ReviewAdapter : ListAdapter<Review, RecyclerView.ViewHolder>(ReviewDiffCal
         }
         holder.itemView.setOnClickListener {
             when (holder.itemViewType) {
-                VIEW_TYPE_REVIEW -> reviewOnClickListener?.invoke()
+                VIEW_TYPE_REVIEW -> onReviewClickListener?.invoke(review)
                 VIEW_TYPE_SHOW_MORE -> onShowMoreClickListener?.invoke()
             }
         }

@@ -9,6 +9,7 @@ import com.suzume.movies.databinding.ReviewItemLargeBinding
 class ReviewListScreenAdapter : ListAdapter<Review, ReviewViewHolder>(ReviewDiffCallback()) {
 
     var onReachEndListener: (() -> Unit)? = null
+    var reviewOnClickListener: ((review: Review) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,6 +24,9 @@ class ReviewListScreenAdapter : ListAdapter<Review, ReviewViewHolder>(ReviewDiff
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = getItem(position)
         holder.bind(review)
+        holder.itemView.setOnClickListener {
+            reviewOnClickListener?.invoke(review)
+        }
         if (position == currentList.size - 3) {
             onReachEndListener?.invoke()
         }

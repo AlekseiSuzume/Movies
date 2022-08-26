@@ -24,7 +24,4 @@ class TrailerListScreenAdapter : ListAdapter<Trailer, TrailerViewHolder>(Trailer
         }
     }
 
-    override fun onViewRecycled(holder: TrailerViewHolder) {
-        super.onViewRecycled(holder)
-    }
 }

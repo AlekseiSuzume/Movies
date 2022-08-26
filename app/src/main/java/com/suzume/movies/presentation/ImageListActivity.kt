@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityImageListBinding
@@ -36,7 +35,8 @@ class ImageListActivity : AppCompatActivity() {
         binding = ActivityImageListBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
-        setupOmReachEndListener()
+        setupOnReachEndListener()
+        setupOnImageClickListener()
 
         binding.btnFrames.setOnClickListener {
             framesBtnOnClickListener()
@@ -131,9 +131,15 @@ class ImageListActivity : AppCompatActivity() {
         binding.btnPosters.setBackgroundColor(resources.getColor(R.color.divider_color, theme))
     }
 
-    private fun setupOmReachEndListener() {
+    private fun setupOnReachEndListener() {
         adapter.onReachEndListener = {
             viewModel.refreshImageLiveData(movieId)
+        }
+    }
+
+    private fun setupOnImageClickListener(){
+        adapter.onImageClickListener = {
+            startActivity(ImageFullActivity.getIntent(this, it.url))
         }
     }
 }

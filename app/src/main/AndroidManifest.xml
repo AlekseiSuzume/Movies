@@ -17,6 +17,12 @@
         android:theme="@style/Theme.Movies"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ReviewFullActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ImageFullActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.TrailerListActivity"
             android:exported="false"
             android:label="@string/activity_label_trailers" />

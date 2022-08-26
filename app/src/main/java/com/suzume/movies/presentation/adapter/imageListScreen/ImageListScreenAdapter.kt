@@ -4,23 +4,27 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.suzume.movies.data.pojo.imageResponse.Image
-import com.suzume.movies.databinding.ImageItemBinding
+import com.suzume.movies.databinding.ImageItemLargeBinding
 
 class ImageListScreenAdapter : ListAdapter<Image, ImageViewHolder>(ImageDiffCallback()) {
 
     var onReachEndListener: (() -> Unit)? = null
+    var onImageClickListener: ((image: Image) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ImageItemBinding.inflate(inflater, parent, false)
+        val binding = ImageItemLargeBinding.inflate(inflater, parent, false)
         return ImageViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val image = getItem(position)
         holder.bind(image)
-        if (position == currentList.size - 5){
+        if (position == currentList.size - 5) {
             onReachEndListener?.invoke()
+        }
+        holder.itemView.setOnClickListener {
+            onImageClickListener?.invoke(image)
         }
     }
 

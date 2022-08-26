@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.suzume.movies.databinding.TrailerItemBinding
 import com.suzume.movies.data.pojo.movieDetailResponse.Trailer
+import com.suzume.movies.databinding.ShowMoreItemTrailerBinding
 
 class TrailerAdapter : ListAdapter<Trailer, RecyclerView.ViewHolder>(TrailerDiffCallback()) {
 
@@ -13,6 +14,9 @@ class TrailerAdapter : ListAdapter<Trailer, RecyclerView.ViewHolder>(TrailerDiff
         const val VIEW_TYPE_TRAILER = 0
         const val VIEW_TYPE_SHOW_MORE = 1
     }
+
+    var onTrailerItemClickListener: ((trailer: Trailer) -> Unit)? = null
+    var onShowMoreItemClickListener: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -22,8 +26,8 @@ class TrailerAdapter : ListAdapter<Trailer, RecyclerView.ViewHolder>(TrailerDiff
                 TrailerViewHolder(binding)
             }
             VIEW_TYPE_SHOW_MORE -> {
-                val binding = TrailerItemBinding.inflate(inflater, parent, false)
-                TrailerViewHolder(binding)
+                val binding = ShowMoreItemTrailerBinding.inflate(inflater, parent, false)
+                ShowMoreTrailerViewHolder(binding)
             }
             else -> throw RuntimeException("Unknown ViewType: $viewType")
         }
@@ -33,6 +37,13 @@ class TrailerAdapter : ListAdapter<Trailer, RecyclerView.ViewHolder>(TrailerDiff
         val trailer = getItem(position)
         if (holder is TrailerViewHolder) {
             holder.bind(trailer)
+        }
+
+        holder.itemView.setOnClickListener {
+            when (holder.itemViewType) {
+                VIEW_TYPE_TRAILER -> onTrailerItemClickListener?.invoke(trailer)
+                VIEW_TYPE_SHOW_MORE -> onShowMoreItemClickListener?.invoke()
+            }
         }
     }
 

@@ -37,11 +37,11 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "YOUTUBE_API_KEY", YOUTUBE_API_KEY)
+        buildConfigField("String", "API_TOKEN", API_TOKEN)
     }
 
 //    buildTypes.each{
-//        it.buildConfigField 'String', 'YOUTUBE_API_KEY', YOUTUBE_API_KEY
+//        it.buildConfigField 'String', 'API_TOKEN', API_TOKEN
 //    }
 
 }

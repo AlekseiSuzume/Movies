@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.suzume.movies.data.pojo.movieDetailResponse.Person
 import com.suzume.movies.databinding.ActorItemBinding
 import com.suzume.movies.databinding.ShowMoreItemActorBinding
-import com.suzume.movies.data.pojo.movieDetailResponse.Person
 
 class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallback()) {
 
@@ -15,8 +15,8 @@ class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallb
         const val VIEW_TYPE_SHOW_MORE = 1
     }
 
-    var actorOnClickListener: (() -> Unit)? = null
-    var showMoreOnClickListener: (() -> Unit)? = null
+    var onActorClickListener: (() -> Unit)? = null
+    var onShowMoreClickListener: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -41,10 +41,11 @@ class ActorAdapter : ListAdapter<Person, RecyclerView.ViewHolder>(ActorDiffCallb
         if (holder is ActorViewHolder) {
             holder.bind(person)
         }
+
         holder.itemView.setOnClickListener {
             when (holder) {
-                is ActorViewHolder -> actorOnClickListener?.invoke()
-                is ShowMoreActorViewHolder -> showMoreOnClickListener?.invoke()
+                is ActorViewHolder -> onActorClickListener?.invoke()
+                is ShowMoreActorViewHolder -> onShowMoreClickListener?.invoke()
             }
         }
     }

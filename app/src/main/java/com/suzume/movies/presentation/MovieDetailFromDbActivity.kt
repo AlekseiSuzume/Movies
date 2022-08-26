@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.suzume.movies.R
 import com.suzume.movies.data.pojo.movieDetailResponse.MovieDetail
+import com.suzume.movies.data.pojo.movieDetailResponse.Person
 import com.suzume.movies.databinding.ActivityMovieDetailFromDbBinding
 import com.suzume.movies.presentation.adapter.actor.ActorAdapter
 import com.suzume.movies.presentation.adapter.movieTeam.MovieTeamAdapter
@@ -27,10 +28,10 @@ import kotlin.properties.Delegates
 class MovieDetailFromDbActivity : AppCompatActivity() {
 
     companion object {
-        private const val EXTRA_FROM_ID = "movieId"
+        private const val EXTRA_ID = "movieId"
         fun getIntent(context: Context, movieId: Int): Intent {
             return Intent(context, MovieDetailFromDbActivity::class.java)
-                .putExtra(EXTRA_FROM_ID, movieId)
+                .putExtra(EXTRA_ID, movieId)
         }
     }
 
@@ -47,12 +48,12 @@ class MovieDetailFromDbActivity : AppCompatActivity() {
 
         init()
         initSetupContent()
-
+        setupOnShowMoreClickListener()
     }
 
     private fun init() {
         viewModel = ViewModelProvider(this)[MovieDetailFromDbViewModel::class.java]
-        movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
+        movieId = intent.getIntExtra(EXTRA_ID, 0)
         viewModel.getSingleMovieDetailFromDb(movieId)
 
         binding.rvActors.adapter = actorAdapter
@@ -104,8 +105,8 @@ class MovieDetailFromDbActivity : AppCompatActivity() {
                     root.resources.getString(
                         R.string.tvYearGenresCountriesLength,
                         year.toString(),
-                        genres.map { name }.distinct().joinToString(", "),
-                        countries.map { name }.distinct().joinToString(", "),
+                        genres.map { it.name }.distinct().joinToString(", "),
+                        countries.map { it.name }.distinct().joinToString(", "),
                         (movieLength / 60).toString(),
                         (movieLength - ((movieLength / 60) * 60))
                     )
@@ -162,8 +163,24 @@ class MovieDetailFromDbActivity : AppCompatActivity() {
                 movieTeamAdapter.submitList(
                     persons.filter { it.enProfession != "actor" }.distinctBy { it.name })
                 llActors.setOnClickListener {
-                    Toast.makeText(this@MovieDetailFromDbActivity, "Actors", Toast.LENGTH_SHORT)
-                        .show()
+                    startActivity(PersonListActivity.getIntent(
+                        this@MovieDetailFromDbActivity,
+                        persons
+                            .filter { it.enProfession == "actor" }
+                            .distinctBy { it.name }
+                                as ArrayList<Person>,
+                        PersonListActivity.ACTOR
+                    ))
+                }
+                llMovieTeam.setOnClickListener {
+                    startActivity(PersonListActivity.getIntent(
+                        this@MovieDetailFromDbActivity,
+                        persons
+                            .filter { it.enProfession != "actor" }
+                            .distinctBy { it.name }
+                                as ArrayList<Person>,
+                        PersonListActivity.MOVIE_TEAM
+                    ))
                 }
                 favoriteObserver(movieDetail)
             }
@@ -184,6 +201,23 @@ class MovieDetailFromDbActivity : AppCompatActivity() {
                     viewModel.removeFavorite(movieId)
                 }
             }
+        }
+    }
+
+    private fun setupOnShowMoreClickListener() {
+        actorAdapter.onShowMoreClickListener = {
+            startActivity(PersonListActivity.getIntent(
+                this,
+                actorAdapter.currentList.toList() as ArrayList<Person>,
+                PersonListActivity.ACTOR
+            ))
+        }
+        movieTeamAdapter.onShowMoreClickListener = {
+            startActivity(PersonListActivity.getIntent(
+                this,
+                movieTeamAdapter.currentList.toList() as ArrayList<Person>,
+                PersonListActivity.MOVIE_TEAM
+            ))
         }
     }
 }

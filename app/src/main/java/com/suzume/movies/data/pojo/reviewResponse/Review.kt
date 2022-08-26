@@ -1,13 +1,15 @@
 package com.suzume.movies.data.pojo.reviewResponse
 
 
+import android.os.Parcelable
+import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Review(
     @SerializedName("author")
     val author: String,
-    @SerializedName("authorId")
-    val authorId: Int,
     @SerializedName("date")
     val date: String,
     @SerializedName("id")
@@ -21,9 +23,8 @@ data class Review(
     @SerializedName("reviewLikes")
     val reviewLikes: Int,
     @SerializedName("title")
-    val title: String,
+    @ColumnInfo(defaultValue = "")
+    val title: String?,
     @SerializedName("type")
     val type: String,
-    @SerializedName("updatedAt")
-    val updatedAt: String,
-)
+) : Parcelable

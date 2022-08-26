@@ -9,7 +9,7 @@ import com.suzume.movies.databinding.MovieItemBinding
 class FavoriteMovieAdapter : ListAdapter<MovieDetail, FavoriteMovieViewHolder>(FavoriteMovieDiffCallback()) {
 
     var onReachEndListener: (() -> Unit)? = null
-    var onClickListener: ((MovieDetail) -> Unit)? = null
+    var onMovieClickListener: ((MovieDetail) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,7 +24,7 @@ class FavoriteMovieAdapter : ListAdapter<MovieDetail, FavoriteMovieViewHolder>(F
             onReachEndListener?.invoke()
         }
         holder.itemView.setOnClickListener {
-            onClickListener?.invoke(movieDetail)
+            onMovieClickListener?.invoke(movieDetail)
         }
     }
 

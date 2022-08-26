@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.suzume.movies.R
@@ -16,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: MovieAdapter
+    private var flagSearch = false
+    private var searchName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +45,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.movies.observe(this) {
-            adapter.submitList(it)
+            if (!flagSearch) {
+                adapter.submitList(it)
+            }
         }
     }
 
@@ -53,14 +59,51 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnReachEndListener() {
         adapter.onReachEndListener = {
-            viewModel.refreshMoviesLiveData()
+            if (!flagSearch) {
+                viewModel.refreshMoviesLiveData()
+            } else {
+                viewModel.refreshSearchMovieLiveData(searchName)
+            }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        val menuItemSearch = menu?.findItem(R.id.menuItemSearch)
-        menuItemSearch?.isVisible = false
+        val menuItem = menu?.findItem(R.id.menuItemSearch)
+        val searchView = menuItem?.actionView as SearchView
+
+        searchView.queryHint = resources.getString(R.string.search_movie)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query == null || query.isEmpty()) {
+                    return false
+                } else {
+                    searchName = query.trim()
+                    viewModel.refreshSearchMovieLiveData(searchName)
+                    viewModel.searchMovies.observe(this@MainActivity) {
+                        flagSearch = true
+                        if (flagSearch) {
+                            adapter.submitList(it)
+                        }
+                    }
+                    removeRecyclerAnimation()
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText == null || newText.isEmpty()) {
+                    viewModel.movies.observe(this@MainActivity) {
+                        flagSearch = false
+                        if (!flagSearch) {
+                            adapter.submitList(it)
+                        }
+                    }
+                    removeRecyclerAnimation()
+                }
+                return false
+            }
+        })
         return true
     }
 
@@ -70,5 +113,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun removeRecyclerAnimation() {
+        binding.recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.recyclerView.scrollToPosition(0)
+                binding.recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 }

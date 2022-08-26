@@ -56,4 +56,8 @@ class MovieDetailFromDbViewModel(application: Application) : AndroidViewModel(ap
         compositeDisposable.add(disposable)
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
+    }
 }

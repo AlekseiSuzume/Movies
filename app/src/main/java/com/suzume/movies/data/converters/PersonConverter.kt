@@ -18,13 +18,4 @@ class PersonConverter {
         return gson.fromJson(json, Array<Person>::class.java).toList()
     }
 
-//    @TypeConverter
-//    fun personListToJson(personList: List<Person>): String {
-//        return gson.toJson(personList, object : TypeToken<ArrayList<Person>>(){}.type)
-//    }
-//
-//    @TypeConverter
-//    fun personListFromJson(string: String): List<Person> {
-//        return gson.fromJson(string, object : TypeToken<List<Person>>(){}.type)
-//    }
 }
