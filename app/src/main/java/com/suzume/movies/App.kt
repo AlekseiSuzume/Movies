@@ -2,7 +2,7 @@ package com.suzume.movies
 
 import android.app.Application
 import androidx.room.Room
-import com.suzume.movies.data.MovieDatabase
+import com.suzume.movies.data.database.MovieDatabase
 
 class App : Application() {
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="8dp"
     android:paddingVertical="16dp"
-    tools:context=".presentation.ReviewListActivity">
+    tools:context=".presentation.reviewScreen.ReviewListActivity">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvReviewAll"
