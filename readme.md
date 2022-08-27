@@ -1,5 +1,10 @@
 ## Movies
 
-Учебный проект, созданный с целью изучить основы *Retrofit | Room | RxJava*
+Учебный проект, созданный с целью изучения основ *Retrofit | Room | RxJava*
+
+<details>
+<summary>preview</summary>
+<img src= "https://github.com/AlekseiSuzume/Movies/blob/master/desc/preview.gif" >
+</details>
 
 Приложение создано на основе API Kinopoisk
