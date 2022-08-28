@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingVertical="8dp"
-    tools:context=".presentation.ImageFullActivity">
+    tools:context=".presentation.imageScreen.ImageFullActivity">
 
     <ImageView
         android:id="@+id/ivFullImage"

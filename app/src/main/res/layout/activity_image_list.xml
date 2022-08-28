@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".presentation.ImageListActivity">
+    tools:context=".presentation.imageScreen.ImageListActivity">
 
 
     <com.google.android.material.card.MaterialCardView

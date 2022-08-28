@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="8dp"
     android:paddingVertical="16dp"
-    tools:context=".presentation.PersonListActivity">
+    tools:context=".presentation.personScreen.PersonListActivity">
 
     <TextView
         android:id="@+id/tvLabel"

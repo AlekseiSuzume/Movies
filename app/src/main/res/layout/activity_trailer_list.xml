@@ -7,6 +7,6 @@
     android:layout_height="match_parent"
     android:padding="12dp"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context=".presentation.TrailerListActivity">
+    tools:context=".presentation.trailerScreen.TrailerListActivity">
 
 </androidx.recyclerview.widget.RecyclerView>

@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="invisible"
-    tools:context=".presentation.MovieDetailActivity">
+    tools:context=".presentation.movieDetailScreen.MovieDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivPoster"
@@ -418,6 +417,8 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false" />
         </FrameLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
