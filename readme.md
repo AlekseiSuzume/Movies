@@ -1,7 +1,5 @@
 ## Movies
 
-Учебный проект, созданный с целью изучения основ *Retrofit | Room | RxJava*
-
 <details>
 <summary>preview</summary>
 <img src= "https://github.com/AlekseiSuzume/Movies/blob/master/desc/preview.gif" >
