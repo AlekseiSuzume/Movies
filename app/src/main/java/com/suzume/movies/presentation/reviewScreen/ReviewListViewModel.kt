@@ -4,17 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.suzume.movies.data.repository.reviewRepository.ReviewRepositoryImpl
 import com.suzume.movies.domain.models.review.ReviewsListDomainModel
 import com.suzume.movies.domain.usecases.review.LoadReviewsListUseCase
 import com.suzume.movies.domain.usecases.review.LoadReviewsTypedUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReviewListViewModel() : ViewModel() {
-
-    private val reviewRepository = ReviewRepositoryImpl()
-    private val loadReviewsListUseCase = LoadReviewsListUseCase(reviewRepository)
-    private val loadReviewsTypedUseCase = LoadReviewsTypedUseCase(reviewRepository)
+class ReviewListViewModel @Inject constructor(
+    private val loadReviewsListUseCase: LoadReviewsListUseCase,
+    private val loadReviewsTypedUseCase: LoadReviewsTypedUseCase,
+) : ViewModel() {
 
     private val _reviewAllList = MutableLiveData<ReviewsListDomainModel>()
     val reviewAllList: LiveData<ReviewsListDomainModel> = _reviewAllList

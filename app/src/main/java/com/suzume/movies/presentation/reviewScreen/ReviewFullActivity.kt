@@ -10,13 +10,14 @@ import kotlin.properties.Delegates
 
 class ReviewFullActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityReviewFullBinding
+    private val binding by lazy {
+        ActivityReviewFullBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
     private lateinit var review: ReviewDomainModel
     private var movieName by Delegates.notNull<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityReviewFullBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         setContent()
@@ -60,7 +61,11 @@ class ReviewFullActivity : AppCompatActivity() {
         private const val POSITIVE_REVIEW_TYPE = "Позитивный"
         private const val NEGATIVE_REVIEW_TYPE = "Негативный"
 
-        fun getIntent(context: Context, reviewDomainModel: ReviewDomainModel, movieName: String): Intent {
+        fun getIntent(
+            context: Context,
+            reviewDomainModel: ReviewDomainModel,
+            movieName: String,
+        ): Intent {
             return Intent(context, ReviewFullActivity::class.java)
                 .putExtra(EXTRA_REVIEW, reviewDomainModel)
                 .putExtra(EXTRA_MOVIE_NAME, movieName)

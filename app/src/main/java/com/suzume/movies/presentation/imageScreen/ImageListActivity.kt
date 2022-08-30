@@ -6,19 +6,29 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.suzume.movies.App.Companion.appComponent
 import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityImageListBinding
+import com.suzume.movies.presentation.ViewModelFactory
 import com.suzume.movies.presentation.adapters.imageListScreen.ImageListScreenAdapter
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class ImageListActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ImageListViewModel::class.java]
+    }
+
     private lateinit var binding: ActivityImageListBinding
-    private lateinit var viewModel: ImageListViewModel
     private lateinit var adapter: ImageListScreenAdapter
     private var movieId by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityImageListBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
@@ -42,7 +52,6 @@ class ImageListActivity : AppCompatActivity() {
 
     private fun init() {
         movieId = intent.getIntExtra(EXTRA_ID, 0)
-        viewModel = ViewModelProvider(this)[ImageListViewModel::class.java]
         viewModel.refreshImageLiveData(movieId)
         adapter = ImageListScreenAdapter()
         binding.rvImage.adapter = adapter

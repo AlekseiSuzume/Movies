@@ -9,23 +9,34 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.suzume.movies.App.Companion.appComponent
 import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityMainBinding
+import com.suzume.movies.presentation.ViewModelFactory
 import com.suzume.movies.presentation.movieDetailScreen.MovieDetailActivity
 import com.suzume.movies.presentation.adapters.movie.MovieAdapter
 import com.suzume.movies.presentation.favoriteScreen.FavoriteMoviesActivity
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
+
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
     private lateinit var adapter: MovieAdapter
     private var flagSearch = false
     private var searchName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         setupOnReachEndListener()
@@ -38,8 +49,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         viewModel.isLoading.observe(this) {
             binding.progressBar.isVisible = it

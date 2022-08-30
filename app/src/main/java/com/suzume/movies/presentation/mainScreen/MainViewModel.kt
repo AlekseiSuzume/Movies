@@ -4,17 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.suzume.movies.data.repository.movieRepository.MovieRepositoryImpl
 import com.suzume.movies.domain.models.movieShort.MovieShortInfoDomainModel
 import com.suzume.movies.domain.usecases.movie.GetMovieListUseCase
 import com.suzume.movies.domain.usecases.movie.SearchMovieUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel() : ViewModel() {
-
-    private val movieRepository = MovieRepositoryImpl()
-    private val getMovieListUseCase = GetMovieListUseCase(movieRepository)
-    private val searchMovieUseCase = SearchMovieUseCase(movieRepository)
+class MainViewModel @Inject constructor(
+    private val getMovieListUseCase: GetMovieListUseCase,
+    private val searchMovieUseCase: SearchMovieUseCase,
+) : ViewModel() {
 
     private val _movies = MutableLiveData<List<MovieShortInfoDomainModel>>()
     val movies: LiveData<List<MovieShortInfoDomainModel>> = _movies

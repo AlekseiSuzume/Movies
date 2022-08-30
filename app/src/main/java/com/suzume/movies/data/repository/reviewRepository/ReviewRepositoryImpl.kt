@@ -1,17 +1,18 @@
 package com.suzume.movies.data.repository.reviewRepository
 
 import com.suzume.movies.data.mappers.toReviewsListDomainModel
-import com.suzume.movies.data.network.ApiFactory
+import com.suzume.movies.data.network.ApiService
 import com.suzume.movies.domain.models.review.ReviewsListDomainModel
 import com.suzume.movies.domain.repository.ReviewRepository
+import javax.inject.Inject
 
-class ReviewRepositoryImpl : ReviewRepository {
-
-    private val apiService = ApiFactory.getApiService()
-
+class ReviewRepositoryImpl @Inject constructor(
+    private val apiService: ApiService,
+) : ReviewRepository {
 
     override suspend fun loadReviewsList(movieId: Int, page: Int): ReviewsListDomainModel {
-        return apiService.loadMovieReviewAll(searchId = movieId, page = page).toReviewsListDomainModel()
+        return apiService.loadMovieReviewAll(searchId = movieId, page = page)
+            .toReviewsListDomainModel()
     }
 
     override suspend fun loadReviewsTypedList(movieId: Int, type: String, page: Int): ReviewsListDomainModel {

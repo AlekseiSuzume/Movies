@@ -13,15 +13,16 @@ import com.suzume.movies.presentation.adapters.personListScreen.PersonListScreen
 
 class PersonListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPersonListBinding
+    private val binding by lazy {
+        ActivityPersonListBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
+
     private var persons = mutableListOf<PersonDomainModel>()
     private lateinit var label: String
     private lateinit var adapter: PersonListScreenAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding =
-            ActivityPersonListBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
 

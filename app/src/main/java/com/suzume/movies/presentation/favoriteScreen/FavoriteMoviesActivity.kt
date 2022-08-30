@@ -7,29 +7,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.suzume.movies.App.Companion.appComponent
 import com.suzume.movies.databinding.ActivityFavoriteBinding
+import com.suzume.movies.presentation.ViewModelFactory
 import com.suzume.movies.presentation.movieDetailScreen.MovieDetailFromDbActivity
 import com.suzume.movies.presentation.adapters.movie.MovieAdapter
+import javax.inject.Inject
 
 class FavoriteMoviesActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityFavoriteBinding
-    lateinit var viewModel: FavoriteMoviesViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[FavoriteMoviesViewModel::class.java]
+    }
+
+    private val binding by lazy {
+        ActivityFavoriteBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
+
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: MovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        binding =
-            ActivityFavoriteBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         setupOnMovieClickListener()
     }
 
     private fun init() {
-        viewModel = ViewModelProvider(this)[FavoriteMoviesViewModel::class.java]
-
         recyclerView = binding.rvFavoriteMovies
         recyclerView.layoutManager = GridLayoutManager(
             this,

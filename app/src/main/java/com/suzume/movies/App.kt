@@ -1,24 +1,23 @@
 package com.suzume.movies
 
 import android.app.Application
-import androidx.room.Room
-import com.suzume.movies.data.database.MovieDatabase
+import android.content.Context
+import com.suzume.movies.di.AppComponent
+import com.suzume.movies.di.DaggerAppComponent
 
 class App : Application() {
 
-    companion object {
-        private lateinit var db: MovieDatabase
-        private const val DB_NAME = "favoriteMovies.db"
-        fun getDatabase(): MovieDatabase {
-            return db
-        }
+    val component by lazy {
+        DaggerAppComponent.factory().create(this)
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        db = Room.databaseBuilder(applicationContext,
-            MovieDatabase::class.java,
-            DB_NAME)
-            .build()
+    companion object {
+        val Context.appComponent: AppComponent
+            get() = when (this) {
+                is App -> component
+                else -> this.applicationContext.appComponent
+            }
     }
+
 }
+

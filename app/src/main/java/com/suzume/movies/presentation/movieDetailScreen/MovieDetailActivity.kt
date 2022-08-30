@@ -13,20 +13,17 @@ import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.suzume.movies.App.Companion.appComponent
 import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityMovieDetailBinding
 import com.suzume.movies.domain.models.movieDetail.MovieDomainModel
 import com.suzume.movies.domain.models.movieDetail.TrailerDomainModel
 import com.suzume.movies.domain.models.person.PersonDomainModel
-import com.suzume.movies.presentation.personScreen.PersonListActivity
-import com.suzume.movies.presentation.reviewScreen.ReviewFullActivity
-import com.suzume.movies.presentation.reviewScreen.ReviewListActivity
-import com.suzume.movies.presentation.trailerScreen.TrailerListActivity
+import com.suzume.movies.presentation.ViewModelFactory
 import com.suzume.movies.presentation.adapters.actor.ActorAdapter
 import com.suzume.movies.presentation.adapters.image.ImageAdapter
 import com.suzume.movies.presentation.adapters.movieTeam.MovieTeamAdapter
@@ -34,11 +31,26 @@ import com.suzume.movies.presentation.adapters.review.ReviewAdapter
 import com.suzume.movies.presentation.adapters.trailer.TrailerAdapter
 import com.suzume.movies.presentation.imageScreen.ImageFullActivity
 import com.suzume.movies.presentation.imageScreen.ImageListActivity
+import com.suzume.movies.presentation.personScreen.PersonListActivity
+import com.suzume.movies.presentation.reviewScreen.ReviewFullActivity
+import com.suzume.movies.presentation.reviewScreen.ReviewListActivity
+import com.suzume.movies.presentation.trailerScreen.TrailerListActivity
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class MovieDetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMovieDetailBinding
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MovieDetailViewModel::class.java]
+    }
+
+    private val binding by lazy {
+        ActivityMovieDetailBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
+
     private lateinit var actorAdapter: ActorAdapter
     private lateinit var movieTeamAdapter: MovieTeamAdapter
     private lateinit var reviewAdapter: ReviewAdapter
@@ -46,11 +58,10 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var trailerAdapter: TrailerAdapter
     private var movieId by Delegates.notNull<Int>()
     private var movieName by Delegates.notNull<String>()
-    private lateinit var viewModel: MovieDetailViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        binding =
-            ActivityMovieDetailBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         loadMovieDetail()
@@ -62,7 +73,6 @@ class MovieDetailActivity : AppCompatActivity() {
         movieId = intent.getIntExtra(EXTRA_ID, 0)
         movieName = intent.getStringExtra(EXTRA_NAME) ?: "Movies"
         supportActionBar?.title = movieName
-        viewModel = ViewModelProvider(this)[MovieDetailViewModel::class.java]
 
         viewModel.refreshMovieDetailLiveData(movieId)
         viewModel.refreshReviewLiveData(movieId)

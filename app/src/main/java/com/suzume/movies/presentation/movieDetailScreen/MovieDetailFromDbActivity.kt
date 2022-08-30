@@ -17,27 +17,38 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.suzume.movies.App.Companion.appComponent
 import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityMovieDetailFromDbBinding
 import com.suzume.movies.domain.models.movieDetail.MovieDomainModel
 import com.suzume.movies.domain.models.person.PersonDomainModel
-import com.suzume.movies.presentation.personScreen.PersonListActivity
+import com.suzume.movies.presentation.ViewModelFactory
 import com.suzume.movies.presentation.adapters.actor.ActorAdapter
 import com.suzume.movies.presentation.adapters.movieTeam.MovieTeamAdapter
+import com.suzume.movies.presentation.personScreen.PersonListActivity
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class MovieDetailFromDbActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMovieDetailFromDbBinding
-    private lateinit var viewModel: MovieDetailFromDbViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MovieDetailFromDbViewModel::class.java]
+    }
+
+    private val binding by lazy {
+        ActivityMovieDetailFromDbBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
+
     private val actorAdapter = ActorAdapter()
     private val movieTeamAdapter = MovieTeamAdapter()
     private var movieId by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityMovieDetailFromDbBinding.inflate(layoutInflater)
-            .also { setContentView(it.root) }
 
         init()
         initSetupContent()
@@ -45,7 +56,6 @@ class MovieDetailFromDbActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        viewModel = ViewModelProvider(this)[MovieDetailFromDbViewModel::class.java]
         movieId = intent.getIntExtra(EXTRA_ID, 0)
         viewModel.getMovieFromDb(movieId)
 

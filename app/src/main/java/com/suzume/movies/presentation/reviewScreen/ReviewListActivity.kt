@@ -8,24 +8,34 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.suzume.movies.App.Companion.appComponent
 import com.suzume.movies.R
 import com.suzume.movies.databinding.ActivityReviewListBinding
+import com.suzume.movies.presentation.ViewModelFactory
 import com.suzume.movies.presentation.adapters.reviewListScreen.ReviewListScreenAdapter
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 class ReviewListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityReviewListBinding
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ReviewListViewModel::class.java]
+    }
+
+    private val binding by lazy {
+        ActivityReviewListBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
     private var movieId by Delegates.notNull<Int>()
     private var movieName by Delegates.notNull<String>()
-    private lateinit var viewModel: ReviewListViewModel
     private lateinit var adapter: ReviewListScreenAdapter
     private var flagType = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        binding =
-            ActivityReviewListBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         setupOnReachEndListener()
@@ -50,7 +60,6 @@ class ReviewListActivity : AppCompatActivity() {
     private fun init() {
         movieId = intent.getIntExtra(EXTRA_FROM_ID, 0)
         movieName = intent.getStringExtra(EXTRA_MOVIE_NAME) ?: "Movies"
-        viewModel = ViewModelProvider(this)[ReviewListViewModel::class.java]
         adapter = ReviewListScreenAdapter()
         binding.rvReviewList.adapter = adapter
 

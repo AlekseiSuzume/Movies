@@ -4,15 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.suzume.movies.data.repository.movieRepository.MovieRepositoryImpl
 import com.suzume.movies.domain.models.movieShort.MovieShortInfoDomainModel
 import com.suzume.movies.domain.usecases.movie.GetAllFavoriteMoviesUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavoriteMoviesViewModel() : ViewModel() {
-
-    private val movieRepository = MovieRepositoryImpl()
-    private val getAllFavoriteMoviesUseCase = GetAllFavoriteMoviesUseCase(movieRepository)
+class FavoriteMoviesViewModel @Inject constructor(
+    private val getAllFavoriteMoviesUseCase: GetAllFavoriteMoviesUseCase
+) : ViewModel() {
 
     private val _allFavoriteMovies = MutableLiveData<List<MovieShortInfoDomainModel>>()
     val allFavoriteMovies: LiveData<List<MovieShortInfoDomainModel>> = _allFavoriteMovies

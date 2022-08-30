@@ -11,14 +11,15 @@ import com.suzume.movies.presentation.adapters.trailerListScreen.TrailerListScre
 
 class TrailerListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityTrailerListBinding
+    private val binding by lazy {
+        ActivityTrailerListBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
+
     private var trailers = mutableListOf<TrailerDomainModel>()
     private val adapter = TrailerListScreenAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding =
-            ActivityTrailerListBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         setupOnTrailerClickListener()

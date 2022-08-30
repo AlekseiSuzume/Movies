@@ -10,12 +10,13 @@ import com.suzume.movies.databinding.ActivityImageFullBinding
 
 class ImageFullActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityImageFullBinding
+    private val binding by lazy {
+        ActivityImageFullBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    }
     private lateinit var imageUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityImageFullBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         init()
         loadImage()
@@ -32,7 +33,7 @@ class ImageFullActivity : AppCompatActivity() {
             .placeholder(R.drawable.no_poster)
             .into(binding.ivFullImage)
     }
-    
+
     companion object {
         private const val EXTRA_URL = "imageUrl"
 
